@@ -1,0 +1,14 @@
+[
+    {
+        "Name": "Wrench for sale",
+        "ListedPrice": 100,
+        "Category": "Tools",
+        "Thumbnail": "/assets/wrench_test_img.jpeg"
+    },
+    {
+        "Name": "BRAND NEW HEADPHONES FOR SALE",
+        "ListedPrice": 1500,
+        "Category": "Electronics",
+        "Thumbnail": "/assets/headphone_test_img.jpeg"
+    }
+]

@@ -9,8 +9,9 @@ public class Item
 
     public required string Name { get; set; }
 
-    [Precision(8, 2)]
-    public decimal ListedPrice { get; set; }
+    public int ListedPrice { get; set; }
+
+    public required string Category { get; set; }
 
     //Username of owner
 

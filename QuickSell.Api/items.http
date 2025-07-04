@@ -1,0 +1,4 @@
+GET http://localhost:5000/general-items
+
+###
+GET http://localhost:5000/general-items?category=Electronics
