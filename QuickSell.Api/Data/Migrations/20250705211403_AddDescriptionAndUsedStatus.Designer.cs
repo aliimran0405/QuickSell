@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickSell.Api.Data;
 
@@ -10,9 +11,11 @@ using QuickSell.Api.Data;
 namespace QuickSell.Api.Data.Migrations
 {
     [DbContext(typeof(QuickSellContext))]
-    partial class QuickSellContextModelSnapshot : ModelSnapshot
+    [Migration("20250705211403_AddDescriptionAndUsedStatus")]
+    partial class AddDescriptionAndUsedStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

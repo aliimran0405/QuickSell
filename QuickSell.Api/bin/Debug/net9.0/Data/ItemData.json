@@ -3,12 +3,16 @@
         "Name": "Wrench for sale",
         "ListedPrice": 100,
         "Category": "Tools",
-        "Thumbnail": "/assets/wrench_test_img.jpeg"
+        "Thumbnail": "/assets/wrench_test_img.jpeg",
+        "Description": "A well used wrench for sale!",
+        "UsedStatus": "TBD"
     },
     {
         "Name": "BRAND NEW HEADPHONES FOR SALE",
         "ListedPrice": 1500,
         "Category": "Electronics",
-        "Thumbnail": "/assets/headphone_test_img.jpeg"
+        "Thumbnail": "/assets/headphone_test_img.jpeg",
+        "Description": "Brand new headphones for sale!",
+        "UsedStatus": "TBD"
     }
 ]

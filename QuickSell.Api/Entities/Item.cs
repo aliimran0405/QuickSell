@@ -13,7 +13,12 @@ public class Item
 
     public required string Category { get; set; }
 
+    public required string Thumbnail { get; set; }
+
+    public required string Description { get; set; }
+
+    public required string UsedStatus { get; set; }
+
     //Username of owner
 
-    public required string Thumbnail { get; set; }
 }

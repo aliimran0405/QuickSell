@@ -2,3 +2,19 @@ GET http://localhost:5000/general-items
 
 ###
 GET http://localhost:5000/general-items?category=Electronics
+
+###
+GET http://localhost:5000/general-items/2016
+
+###
+POST http://localhost:5000/general-items
+Content-Type: application/json
+
+{
+    "Name": "Samsung Remote Controller",
+    "ListedPrice": 99,
+    "Category": "Electronics",
+    "Thumbnail": "/assets/name_of_new_image.jpeg",
+    "Description": "Some new description",
+    "UsedStatus": "New"
+}

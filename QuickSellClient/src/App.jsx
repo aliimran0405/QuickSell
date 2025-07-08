@@ -1,10 +1,18 @@
 import React, { useState } from 'react'
+import { Route, Routes } from 'react-router-dom';
+import GeneralItems from '../pages/GeneralItems';
+import Nav from '../Components/Nav';
 
 
 
 function App() {
   return(
-    <h1>Hello from Client</h1>
+    <>
+      <Nav />
+      <Routes>
+        <Route path='/general-items' element={<GeneralItems />}/>
+      </Routes>
+    </>
   );
 }
 

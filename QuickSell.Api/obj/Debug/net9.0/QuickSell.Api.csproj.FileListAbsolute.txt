@@ -164,3 +164,4 @@
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/obj/Debug/net9.0/ref/QuickSell.Api.dll
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Data/ItemData.json
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/QuickSell.Api.staticwebassets.runtime.json
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/AutoMapper.dll

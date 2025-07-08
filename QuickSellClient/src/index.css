@@ -1,1 +1,132 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: black;
+}
+
+.nav-container {
+    width: 100%;
+    background-color: hsl(0, 0%, 10%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    color: white;
+    font-size: 1.5rem;
+    flex: 1;
+    text-align: left;
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+}
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.nav-spacer {
+    flex: 1;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+.card-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column; /* Stack cards vertically */
+  gap: 20px;               /* Space between cards */
+  padding: 30px;
+  overflow-y: auto;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.filter-wrapper {
+  background-color: hsl(0, 0%, 10%);
+  width: 30%;
+  height: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.filter-wrapper ul li{
+  color: white;
+  margin-top: 20px;
+  list-style: none;
+}
+
+.card-wrapper {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 75px;
+  background-color: hsl(0, 0%, 10%);
+  border: 1px solid hsl(0, 0%, 20%);
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 90%;
+  height: 250px;
+  margin-top: 20px;
+  margin-left: 30px;
+}
+
+.card-wrapper p, h1 {
+  color: white;
+}
+
+.card-wrapper img {
+  grid-row: 1 / span 3;
+  width: 150px;
+  height: 160px;
+  object-fit: contain;
+}
+
+#card-title {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 1.5rem;
+}
+
+#card-price {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+#card-area {
+  grid-column: 2;
+  grid-row: 4;
+}
+
+#card-rating {
+  grid-column: 3;
+  grid-row: 4;
+}
+
+
+
+
 
