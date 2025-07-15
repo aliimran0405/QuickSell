@@ -1,4 +1,5 @@
 * {
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   box-sizing: border-box;
   margin: 0;
 }
@@ -9,7 +10,7 @@ body {
 
 .nav-container {
     width: 100%;
-    background-color: hsl(0, 0%, 10%);
+    background-color: hsl(0, 0%, 15%);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -65,12 +66,21 @@ body {
   box-sizing: border-box;
 }
 
+.no-items-text {
+  color: white;
+  font-size: 1.2rem;
+}
+
 .filter-wrapper {
-  background-color: hsl(0, 0%, 10%);
-  width: 30%;
-  height: auto;
+  background-color: hsl(0, 0%, 15%);
+  width: 18%;
+  height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.filter-wrapper input {
+  float: right;
 }
 
 .filter-wrapper ul li{
@@ -82,9 +92,9 @@ body {
 .card-wrapper {
   display: grid;
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 75px;
-  background-color: hsl(0, 0%, 10%);
-  border: 1px solid hsl(0, 0%, 20%);
+  grid-template-rows: 88px;
+  background-color: hsl(0, 0%, 20%);
+  border: 1px solid hsl(0, 0%, 35%);
   border-radius: 20px;
   padding: 20px;
   box-sizing: border-box;
@@ -99,7 +109,7 @@ body {
 }
 
 .card-wrapper img {
-  grid-row: 1 / span 3;
+  grid-row: 1 / 2;
   width: 150px;
   height: 160px;
   object-fit: contain;
@@ -125,6 +135,149 @@ body {
   grid-column: 3;
   grid-row: 4;
 }
+
+.carousel-container {
+  margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-item-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.carousel-img {
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  height: 50vh;
+  object-fit: contain;
+  display: block;
+}
+
+.new-section {
+  margin-top: 30px;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-container > * {
+  margin-bottom: 20px;
+}
+
+.info-container {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  text-align: left;
+}
+
+.info-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-header-row h1 {
+  margin: 0;
+}
+
+.info-header-row p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.used-status-info {
+  border: 1px solid white;
+  border-radius: 20px;
+  padding: 10px;
+  max-width: 30%;
+  text-align: center;
+}
+
+.bid-button {
+  position: relative;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(45deg, #0ce39a, #69007f, #fc0987);
+  padding: 10px 55px;
+  border-radius: 10px;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+.bid-button span {
+  position: relative;
+  z-index: 1;
+}
+
+.bid-button::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #272727;
+  border-radius: 9px;
+  transition: 0.5s;
+}
+
+.bid-button:hover::before {
+  opacity: 0.7;
+}
+
+.bid-button::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background: linear-gradient(45deg, #0ce39a, #69007f, #fc0987);
+  border-radius: 9px;
+  transition: 0.5s;
+  opacity: 0;
+  filter: blur(20px);
+}
+
+.bid-button:hover::after{
+  opacity: 1;
+}
+
+.sens-info, .item-data {
+  color: white;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  text-align: left;
+}
+
+.not-logged-in {
+  display: flex;
+  align-items: center;
+  gap: 16px; 
+}
+
+.not-logged-in img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.item-data {
+  margin-bottom: 50px;
+  font-size: 0.85em;
+}
+
+
+
+
+
+
+
+
 
 
 

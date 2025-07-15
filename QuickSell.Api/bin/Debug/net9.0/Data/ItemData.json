@@ -2,7 +2,7 @@
     {
         "Name": "Wrench for sale",
         "ListedPrice": 100,
-        "Category": "Tools",
+        "Category": "tools",
         "Thumbnail": "/assets/wrench_test_img.jpeg",
         "Description": "A well used wrench for sale!",
         "UsedStatus": "TBD"
@@ -10,7 +10,7 @@
     {
         "Name": "BRAND NEW HEADPHONES FOR SALE",
         "ListedPrice": 1500,
-        "Category": "Electronics",
+        "Category": "electronics",
         "Thumbnail": "/assets/headphone_test_img.jpeg",
         "Description": "Brand new headphones for sale!",
         "UsedStatus": "TBD"

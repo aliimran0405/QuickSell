@@ -9,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connString = builder.Configuration.GetConnectionString("QuickSell");
 builder.Services.AddSqlServer<QuickSellContext>(connString);
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
@@ -24,6 +34,8 @@ if (db.Items.Any())
 var items = ReadJSON.ReadJson();
 db.Items.AddRange(items);
 db.SaveChanges();
+
+app.UseCors();
 
 app.UseStaticFiles();
 
