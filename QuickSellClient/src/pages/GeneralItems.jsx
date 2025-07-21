@@ -21,7 +21,8 @@ function GeneralItems() {
     }, []);
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search)
+        document.title = "General Items";
+        const params = new URLSearchParams(location.search);
         console.log("PARAMS: ", params);
         const category = params.getAll('category');
         console.log("CATEGORY: ", category);

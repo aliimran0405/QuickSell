@@ -15,9 +15,12 @@ public class Item
 
     public required string Thumbnail { get; set; }
 
+    public List<string> MainImages { get; set; } = new List<string>();
+
     public required string Description { get; set; }
 
     public required string UsedStatus { get; set; }
+
 
     //Username of owner
 

@@ -1,3 +1,4 @@
 {
-  "dotnet.defaultSolution": "QuickSell.sln"
+  "dotnet.defaultSolution": "QuickSell.sln",
+  "FSharp.suggestGitignore": false
 }

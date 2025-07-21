@@ -10,7 +10,7 @@ body {
 
 .nav-container {
     width: 100%;
-    background-color: hsl(0, 0%, 15%);
+    background-color: hsl(0, 0%, 10%);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -72,7 +72,7 @@ body {
 }
 
 .filter-wrapper {
-  background-color: hsl(0, 0%, 15%);
+  background-color: hsl(0, 0%, 10%);
   width: 18%;
   height: 100vh;
   padding: 20px;
@@ -93,8 +93,8 @@ body {
   display: grid;
   grid-template-columns: 200px 1fr;
   grid-template-rows: 88px;
-  background-color: hsl(0, 0%, 20%);
-  border: 1px solid hsl(0, 0%, 35%);
+  background-color: hsl(0, 0%, 10%);
+  border: 1px solid hsl(0, 0%, 25%);
   border-radius: 20px;
   padding: 20px;
   box-sizing: border-box;
@@ -269,6 +269,45 @@ body {
 .item-data {
   margin-bottom: 50px;
   font-size: 0.85em;
+}
+
+.login, .register {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container, .register-container {
+  color: white;
+  background-color: hsl(0, 0%, 5%);
+  border: 1px solid hsl(0, 0%, 15%);
+  border-radius: 25px;
+  max-width: 40%;
+  padding: 40px 90px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container input, .register-container input {
+  margin-bottom: 20px;
+}
+
+.login-container h2 {
+  align-self: flex-start;
+  margin-bottom: 30px;
+}
+
+.login-container button, .register-container button {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  background: rgb(6, 26, 63);
+  padding: 7px;
+  border-radius: 10px;
+  font-size: 1em;
+  cursor: pointer;
 }
 
 

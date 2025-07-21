@@ -165,3 +165,11 @@
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Data/ItemData.json
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/QuickSell.Api.staticwebassets.runtime.json
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/AutoMapper.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Microsoft.AspNetCore.Cryptography.Internal.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Microsoft.Extensions.Identity.Core.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Microsoft.Extensions.Identity.Stores.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll

@@ -8,6 +8,7 @@ public record class CreateItemDto
     int ListedPrice,
     string Category,
     string Thumbnail,
+    IEnumerable<string> MainImages,
     string Description,
     string UsedStatus
 );

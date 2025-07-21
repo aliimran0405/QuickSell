@@ -45,7 +45,7 @@ function Filter() {
     return (
         <div className="filter-wrapper">
             <form>
-                <fieldset>
+                
                     <ul>
                         {categories.map((cat) => (
                             <li key={cat}>
@@ -62,7 +62,7 @@ function Filter() {
                             </li>
                         ))}
                     </ul>
-                </fieldset>
+                
             </form>
         </div>
     );

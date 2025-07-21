@@ -30,7 +30,7 @@ function CarouselComponent(props) {
             dotListClass="custom-dot-list-style"
             itemClass="carousel-item-padding-40-px"
             >
-            <div className="carousel-item-wrapper">
+            {/*<div className="carousel-item-wrapper">
                 <img className="carousel-img" src="/t1.png" alt="1" />
             </div>
             <div className="carousel-item-wrapper">
@@ -41,7 +41,14 @@ function CarouselComponent(props) {
             </div>
             <div className="carousel-item-wrapper">
                 <img className="carousel-img" src="/vite.svg" alt="2" />
-            </div>
+            </div> */}
+
+            {props.mainImages && props.mainImages.map(img => (
+                <div className="carousel-item-wrapper">
+                    <img className="carousel-img" src={`http://localhost:5000/${img}`} alt="2" />
+                </div>
+            ))}
+            
         </Carousel>
     );
 }

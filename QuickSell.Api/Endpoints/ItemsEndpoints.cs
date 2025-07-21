@@ -61,6 +61,7 @@ public static class ItemsEndpoints
                 item.Name,
                 item.ListedPrice,
                 item.Thumbnail,
+                item.MainImages,
                 item.Description,
                 item.UsedStatus
             );

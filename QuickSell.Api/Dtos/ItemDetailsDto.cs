@@ -5,6 +5,7 @@ public record class ItemDetailsDto(
     string Name,
     int ListedPrice,
     string Thumbnail,
+    IEnumerable<string> MainImages,
     string Description,
     string UsedStatus
 );
