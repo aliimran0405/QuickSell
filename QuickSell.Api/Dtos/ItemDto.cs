@@ -5,6 +5,8 @@ public record class ItemDto(
     string Name,
     int ListedPrice,
     string Category,
-    string Thumbnail
+    string Thumbnail,
+    string PostCode,
+    string Area
 );
 

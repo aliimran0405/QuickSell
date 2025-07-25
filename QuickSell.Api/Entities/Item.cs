@@ -21,6 +21,10 @@ public class Item
 
     public required string UsedStatus { get; set; }
 
+    public required string PostCode { get; set; }
+
+    public required string Area { get; set; }
+
 
     //Username of owner
 

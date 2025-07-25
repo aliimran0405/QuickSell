@@ -10,5 +10,7 @@ public record class CreateItemDto
     string Thumbnail,
     IEnumerable<string> MainImages,
     string Description,
-    string UsedStatus
+    string UsedStatus,
+    string PostCode,
+    string Area
 );

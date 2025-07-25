@@ -18,3 +18,22 @@ Content-Type: application/json
     "Description": "Some new description",
     "UsedStatus": "New"
 }
+
+###
+PUT http://localhost:5000/general-items/4186
+Content-Type: application/json
+
+{
+    "Name": "Kul Skjorte",
+    "ListedPrice": 200,
+    "Category": "others",
+    "Thumbnail": "/assets/headphone_test_img.jpeg",
+    "MainImages": [
+        "/assets/headphones_main_1.webp",
+        "/assets/headphones_main_2.jpeg"
+    ],
+    "Description": "This is a PUT request",
+    "UsedStatus": "Used - Visibly Used",
+    "PostCode": "0645",
+    "Area": "Oslo"
+}

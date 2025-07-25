@@ -1,3 +1,5 @@
+/* Note for self: Next time, do component based styling. This is too messy */
+
 * {
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   box-sizing: border-box;
@@ -309,6 +311,317 @@ body {
   font-size: 1em;
   cursor: pointer;
 }
+
+.file-upload-btn {
+    all: unset; /* Removes default button styles */
+    cursor: pointer;
+    display: inline-block;
+    background-color: black;
+    padding: 0;
+    border-radius: 10px;
+}
+
+.upload-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.image-upload-container {
+    width: 800px;
+    height: 500px;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    justify-content: space-between; /* Push content to top and bottom */
+    align-items: center;
+    background-color: black;
+    padding: 20px; /* Add spacing around content */
+    transition: border-color 0.3s ease;
+}
+
+.image-upload-container p {
+  color: white;
+  font-size: 0.6em;
+}
+
+.image-upload-container:hover {
+    border-color: #888;
+}
+
+.default-upload-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.uploaded-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.uploaded-image {
+    max-width: 180px;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+    background-color: #111;
+    transition: transform 0.2s ease;
+}
+
+.uploaded-image:hover {
+    transform: scale(1.05);
+    border-color: #888;
+}
+
+.upload-wrapper {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-wrapper h2 {
+  color: white;
+  text-align: left;
+}
+
+.fill-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  width: 70%;
+}
+
+.fill-info-container h2 {
+  margin-bottom: 15px;
+}
+
+.fill-info-container input {
+  color: white;
+}
+
+.fill-info-container input, textarea#description-text {
+  background-color: hsl(0, 0%, 20%);
+  border: 1px solid hsl(0, 0%, 30%);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.fill-info-container textarea#description-text {
+  height: 150px;
+  resize: vertical;
+  color: white;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group select {
+  color: white;
+  background-color: hsl(0, 0%, 20%);
+  border: 1px solid hsl(0, 0%, 30%);
+  border-radius: 5px;
+  max-width: 225px;
+  height: 30px;
+}
+
+.description-textarea {
+  position: relative;
+  width: 100%;
+}
+
+.description-textarea textarea {
+  width: 100%;
+  padding-bottom: 24px; 
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.char-counter {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 12px;
+  color: gray;
+  pointer-events: none;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* space between label and input */
+}
+
+
+.submit-ad-container {
+  margin-top: 20px; /* NOTE: NEED TO FIX MARGIN TOP AND BOTTOM TO BE INSIDE <hr> STYLES ONLY*/
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+  width: 70%;
+}
+
+.image-wrapper {
+  position: relative;
+  display: inline-block;
+  margin: 10px;
+}
+
+.uploaded-image {
+  width: 150px; 
+  height: auto;
+  border-radius: 8px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  backdrop-filter: blur(8px); 
+  background-color: rgba(255, 255, 255, 0.1); 
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.my-page-container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+/* OWNER SECTION BEGIN */
+.owner-section {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.edit-btn, .delete-btn {
+  position: relative;
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 55px;
+  border-radius: 10px;
+  font-size: 1.25em;
+  cursor: pointer;
+  margin-right: 20px; /* Space between buttons if side by side */
+}
+
+/* Edit Button (Blue Theme) */
+.edit-btn {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+}
+
+.edit-btn::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #272727;
+  border-radius: 9px;
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.edit-btn:hover::before {
+  opacity: 0.7;
+}
+
+.edit-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  border-radius: 9px;
+  transition: 0.5s;
+  opacity: 0;
+  filter: blur(20px);
+  z-index: 0;
+}
+
+.edit-btn:hover::after {
+  opacity: 1;
+}
+
+.edit-btn span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Delete Button (Red Theme) */
+.delete-btn {
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+}
+
+.delete-btn::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  background: #272727;
+  border-radius: 9px;
+  transition: 0.5s;
+  z-index: 0;
+}
+
+.delete-btn:hover::before {
+  opacity: 0.7;
+}
+
+.delete-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  border-radius: 9px;
+  transition: 0.5s;
+  opacity: 0;
+  filter: blur(20px);
+  z-index: 0;
+}
+
+.delete-btn:hover::after {
+  opacity: 1;
+}
+
+.delete-btn span {
+  position: relative;
+  z-index: 1;
+}
+/* OWNER SECTION END */
+
+
+
+
+
+
+
+
+
+
 
 
 

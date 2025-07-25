@@ -61,10 +61,10 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:5000/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userName: user, email, password: pwd, firstName, lastName })
+            const response = await fetch("http://localhost:5000/register-user", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userName: email, email: email, password: pwd, firstName, lastName, customUsername: user })
             });
             if (!response.ok) {
                 const error = await response.json();
@@ -150,7 +150,7 @@ function Register() {
                         
                         {errMsg && <p className="error">{errMsg}</p>}
                         
-                        <button className="login-button" type="submit">Log in</button>
+                        <button className="login-button" type="submit">Register</button>
                     </div>
                 </div>
             </form>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using QuickSell.Api.Data;
 using QuickSell.Api.Endpoints;
@@ -12,16 +13,49 @@ var connString = builder.Configuration.GetConnectionString("QuickSell");
 builder.Services.AddSqlServer<QuickSellContext>(connString);
 
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<UserProfile>().AddEntityFrameworkStores<QuickSellContext>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddIdentityCore<UserProfile>(options =>
+{
+    // Disable account lockout
+    options.Lockout.AllowedForNewUsers = false;
+    options.Lockout.MaxFailedAccessAttempts = int.MaxValue;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
+
+    // Disable email confirmation
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedAccount = false;
+
+    // Simplify password rules
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+})
+.AddEntityFrameworkStores<QuickSellContext>()
+.AddDefaultTokenProviders();
+
+
+
+builder.Services.AddIdentityApiEndpoints<UserProfile>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.ExpireTimeSpan = TimeSpan.FromHours(1);
+    options.LoginPath = "/login"; // optional
+    options.SlidingExpiration = true;
+});
+
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
+    options.AddPolicy("AllowFrontEnd", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("http://localhost:5173")
+              .AllowCredentials()
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -57,7 +91,11 @@ db.SaveChanges();
 
 app.MapIdentityApi<UserProfile>();
 
-app.UseCors();
+app.UseCors("AllowFrontEnd");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseStaticFiles();
 

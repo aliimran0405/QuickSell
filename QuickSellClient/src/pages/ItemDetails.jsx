@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import CarouselComponent from "../Components/CarouselComponent";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function ItemDetails() {
 
     const [item, setItem] = useState([]);
     const {itemId} = useParams();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`http://localhost:5000/general-items/${itemId}`)
@@ -15,12 +17,18 @@ function ItemDetails() {
             });
     }, []);
 
+    /* The information under should be assigned dynamically 
+    but for now it is simulated as backend for users is not ready */ 
+    //const isOwner = item.ownerId === user.id // should look something like this
+
+    const isOwner = true;
+
     useEffect(() => {
         document.title = item.name;
     });
 
     //let imagesArr = [];
-    let isLoggedIn = false;
+    let isLoggedIn = false; // For testing only
 
     // const combineImages = () => {
     //     imagesArr.push(item.thumbnail);
@@ -33,6 +41,11 @@ function ItemDetails() {
         ...(item.thumbnail ? [item.thumbnail] : []),
         ...(Array.isArray(item.mainImages) ? item.mainImages : [])
     ];
+
+    const handleEditAd = () => {
+        navigate(`/general-items/edit/${itemId}`);
+    }
+
 
     return(
         <>
@@ -68,6 +81,13 @@ function ItemDetails() {
                     </div>
                 }
             </div>
+            
+            {isOwner && (
+                <div className="owner-section">
+                    <button className="edit-btn" onClick={() => handleEditAd()}><span>Edit Ad</span></button>
+                    <button className="delete-btn" onClick={() => handleDeleteAd}><span>Delete Ad</span></button>
+                </div>
+            )}
             <hr className="new-section" />
             <div className="item-data">
                 <p>Published: 04.05.2025</p>
