@@ -25,6 +25,8 @@ public class Item
 
     public required string Area { get; set; }
 
+    public required string OwnerId { get; set; }
+
 
     //Username of owner
 

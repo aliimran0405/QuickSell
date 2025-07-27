@@ -1,11 +1,13 @@
 import FileUploader from "../Components/FileUploader";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useCheckAuth from "../Utils/useCheckAuth";
 
 function CreateItem() {
 
-    // NOTE: FIX INPUT VALIDATION
+    
+    const {userData, loading} = useCheckAuth("getUserId");
 
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState("");
@@ -30,21 +32,64 @@ function CreateItem() {
     const [areaError, setAreaError] = useState("");
 
     const [imageFiles, setImageFiles] = useState([]);
-    const [imageUrls, setImageUrls] = useState([]);
+    //const [imageUrls, setImageUrls] = useState([]);
 
     const [hasSubmitted, setHasSubmitted] = useState(false);
 
     const navigate = useNavigate();
 
+    // EDIT MODE 
+    // NOTE - make sure not anyone can access '/general-items/edit/id' via direct URL. Set up restrictions when user auth is complete.
+    const { itemId } = useParams();
+
+    const isEditMode = Boolean(itemId);
+
+    const [curItem, setCurItem] = useState(null);
+
+    const [initialPreviewUrls, setInitialPreviewUrls] = useState([]);
+
     useEffect(() => {
         document.title = "New Ad";
-    }, [])
+        
+        if (isEditMode) {
+            
+            axios.get(`http://localhost:5000/general-items/${itemId}`)
+                .then(response => {
+                    setCurItem(response.data);
+                });
+        }
+    }, [isEditMode, itemId]);
+
+    useEffect(() => {
+        if (isEditMode && curItem) {
+            setName(curItem.name);
+            setPrice(curItem.listedPrice.toString());
+            setCategory(curItem.category);
+            setDescription(curItem.description);
+            setDescriptionTextCount(curItem.description.length);
+            setUsedStatus(curItem.usedStatus);
+            setPostCode(curItem.postCode);
+            setArea(curItem.area);
+
+           
+            //const previewUrls = curItem.mainImages.map(path => `http://localhost:5000/${path}`);
+            
+            const allImageUrls = [`http://localhost:5000/${curItem.thumbnail}`, ...curItem.mainImages.map(path => `http://localhost:5000/${path}`)];
+
+            setInitialPreviewUrls(allImageUrls);  
+        }
+    }, [curItem, isEditMode]);
+
+    if (!userData) return(<p>Loading...</p>);
+    
+    const userId = userData.userId;
 
     const handleCreateItemSubmit = async (e) => {
         e.preventDefault();
         setHasSubmitted(true);
         let valid = true;
         const formData = new FormData();
+            console.log("USERID: ", userId);
 
             // Name validation
             if (name.trim() === "") {
@@ -122,39 +167,56 @@ function CreateItem() {
         formData.append("usedStatus", usedStatus);
         formData.append("postCode", postCode);
         formData.append("area", area);
+        formData.append("ownerId", userId);
 
         imageFiles.forEach((file) => {
             formData.append("images", file);
         });
 
-        try {
-            const response = axios.post("http://localhost:5000/general-items/new", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                }
-            });
-        } catch (error) {
-            console.log("Something went wrong with new item post...");
+        if (!isEditMode) {
+            try {
+                const response = axios.post("http://localhost:5000/general-items/new", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
+                });
+            } catch (error) {
+                console.log("Something went wrong with new item post...");
+            }
+        }
+        else {
+            try {
+                console.log("Edit mode!");
+                const response = axios.put(`http://localhost:5000/general-items/edit/${itemId}`, formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    }
+                });
+            } catch (error) {
+                console.log("PUT error");
+            }
         }
 
     }
 
     return(
+        <>
+        {console.log("USERDATA2: ", userData)}
+        <h1>Create new ad</h1>
         <form onSubmit={handleCreateItemSubmit}>
-            <h1>Create new ad</h1>
-            <FileUploader setImageFiles={setImageFiles} setImageUrls={setImageUrls}/>
+            <FileUploader initialPreviewUrls={initialPreviewUrls} setImageFiles={setImageFiles}/>
             <hr className="new-section" />
             <div className="fill-info-container">
                 <h2>Item Details</h2>
                 <div className="input-field">
                     <label htmlFor="name-of-ad">Name</label>
-                    <input type="text" onChange={(e) => setName(e.target.value)}/>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)}/>
                     {isNameValid && <p style={{color: "red"}}>{isNameValid}</p>}
                 </div>
                 
                 <div className="input-field">
                     <label htmlFor="price">Price</label>
-                    <input type="number" onChange={(e) => setPrice(e.target.value)}/>
+                    <input type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
                     {priceError && <p style={{color: "red"}}>{priceError}</p>}
                 </div>
 
@@ -174,7 +236,7 @@ function CreateItem() {
                 <div className="input-field">
                     <div className="input-group">
                         <label htmlFor="category">Category</label>
-                        <select name="category" id="category" onChange={(e) => setCategory(e.target.value)}>
+                        <select name="category" id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
                             <option value="none">None</option>
                             <option value="tools">Tools</option>
                             <option value="electronics">Electronics</option>
@@ -186,7 +248,7 @@ function CreateItem() {
                         {categoryError && <p style={{color: "red"}}>{categoryError}</p>}
 
                         <label htmlFor="used-status">Enter Used Status</label>
-                        <select name="used-status" id="used-status" onChange={(e) => setUsedStatus(e.target.value)}>
+                        <select name="used-status" id="used-status" value={usedStatus} onChange={(e) => setUsedStatus(e.target.value)}>
                             <option value="none">None</option>
                             <option value="Used - Visibly Used">Used - Visibly Used</option>
                             <option value="Used - Not Visibly Used">Used - Not Visibly Used</option>
@@ -200,7 +262,8 @@ function CreateItem() {
                 <div className="input-field">
                     <label htmlFor="postcode">Postcode</label>
                     <input type="text" 
-                        id="postcode" 
+                        id="postcode"
+                        value={postCode}
                         onChange={(e) => {
                             const value = e.target.value;
                             
@@ -214,7 +277,7 @@ function CreateItem() {
                 
                 <div className="input-field">
                     <label htmlFor="area">Area</label>
-                    <input type="text" id="area" onChange={(e) => setArea(e.target.value)}/>
+                    <input type="text" id="area" value={area} onChange={(e) => setArea(e.target.value)}/>
                     {areaError && <p style={{color: "red"}}>{areaError}</p>}
                 </div>
             </div>
@@ -225,6 +288,7 @@ function CreateItem() {
                 </button>
             </div>
         </form>
+        </>
     )
 }
 

@@ -186,6 +186,10 @@ namespace QuickSell.Api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PostCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -11,7 +11,8 @@
         "Description": "Heavy-duty 12-inch adjustable wrench in excellent condition. Made from high-carbon steel with a rust-resistant chrome finish. Easy to adjust, comfortable to hold, and perfect for home repairs, plumbing, or automotive work. Only used a couple of times. Selling because I have a duplicate. Available for pickup in Trondheim or local delivery.",
         "UsedStatus": "Used - Visibly Used",
         "PostCode": "2013",
-        "Area": "Skjetten"
+        "Area": "Skjetten",
+        "OwnerId": "123"
     },
     {
         "Name": "BRAND NEW HEADPHONES FOR SALE",
@@ -25,6 +26,7 @@
         "Description": "Brand new headphones for sale!",
         "UsedStatus": "New - Packaging Included",
         "PostCode": "2010",
-        "Area": "Strømmen"
+        "Area": "Strømmen",
+        "OwnerId": "321"
     }
 ]

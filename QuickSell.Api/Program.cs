@@ -5,15 +5,42 @@ using QuickSell.Api.Endpoints;
 using QuickSell.Api.Entities;
 using QuickSell.Api.Utils;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "TestSecretKey12345678!!!MoreBytes";
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+var issuer = builder.Configuration["Jwt:Issuer"] ?? "QuickSellAPI";
 
 // Db setup -- see 'appsettings.json'
 var connString = builder.Configuration.GetConnectionString("QuickSell");
 builder.Services.AddSqlServer<QuickSellContext>(connString);
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = issuer,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+        ClockSkew = TimeSpan.Zero
+    };
+});
+
 builder.Services.AddIdentityCore<UserProfile>(options =>
 {
     // Disable account lockout
@@ -33,11 +60,12 @@ builder.Services.AddIdentityCore<UserProfile>(options =>
     options.Password.RequireLowercase = false;
 })
 .AddEntityFrameworkStores<QuickSellContext>()
-.AddDefaultTokenProviders();
+.AddDefaultTokenProviders()
+.AddSignInManager();
 
 
 
-builder.Services.AddIdentityApiEndpoints<UserProfile>();
+//builder.Services.AddIdentityApiEndpoints<UserProfile>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -89,7 +117,8 @@ var items = ReadJSON.ReadJson();
 db.Items.AddRange(items);
 db.SaveChanges();
 
-app.MapIdentityApi<UserProfile>();
+
+//app.MapIdentityApi<UserProfile>();
 
 app.UseCors("AllowFrontEnd");
 

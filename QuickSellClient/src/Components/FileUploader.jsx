@@ -1,10 +1,16 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DefaultUploadImage from "../assets/default_img_upload.png";
 
-function FileUploader({ setImageFiles, setImageUrls }) {
+function FileUploader({ initialPreviewUrls, setImageFiles }) {
 
     // Includes the URL of the image file
     const [file, setFile] = useState([]);
+
+    useEffect(() => {
+        if (initialPreviewUrls?.length > 0) {
+            setFile(initialPreviewUrls);
+        }
+    }, [initialPreviewUrls]);
 
     const fileUploadRef = useRef();
 
@@ -15,6 +21,7 @@ function FileUploader({ setImageFiles, setImageUrls }) {
 
     const handleImageDisplay = () => {
         const uploadedFiles = fileUploadRef.current.files;
+        console.log(uploadedFiles);
 
         const cachedURLs = Array.from(uploadedFiles).map(file => URL.createObjectURL(file));
         
@@ -24,10 +31,10 @@ function FileUploader({ setImageFiles, setImageUrls }) {
             return;
         }
 
-        setFile(prev => [...prev, ...cachedURLs]);
+        setFile(prev => [...prev, ...cachedURLs]); // cachedUrls ARE the images
         
         setImageFiles(prev => [...prev, ...uploadedFiles]);     
-        setImageUrls(prev => [...prev, ...cachedURLs]);
+        
     }
 
     function handleRemoveImage(index) {
@@ -53,7 +60,7 @@ function FileUploader({ setImageFiles, setImageUrls }) {
                     {file.map((f, index) => (
                         <div className="image-wrapper">
                             <img key={index} src={f} alt={`uploaded_file_${index}`} className="uploaded-image" />
-                            <button className="remove-btn" onClick={() => handleRemoveImage(index)}>x</button>
+                            <button type="button" className="remove-btn" onClick={() => handleRemoveImage(index)}>x</button>
                         </div>
                     ))}
                 </div>

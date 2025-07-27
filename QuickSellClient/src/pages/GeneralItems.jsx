@@ -48,7 +48,7 @@ function GeneralItems() {
                         <p className="no-items-text">No listed items for this category</p>
                     ) : (
                         filteredItems.map(item => (
-                            <Card id={item.itemId} thumbnail={`http://localhost:5000/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
+                            <Card linkTo={"/general-items"} id={item.itemId} thumbnail={`http://localhost:5000/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
                     )))}
                 </div>
             </div>

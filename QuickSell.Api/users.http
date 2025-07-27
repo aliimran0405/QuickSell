@@ -1,12 +1,13 @@
-POST http://localhost:5000/register-account
+POST http://localhost:5000/register
 Content-Type: application/json
 
 {
-    "userName": "TestUser111",
+    "userName": "hello111@gmail.com",
     "email": "hello111@gmail.com",
     "password": "SomePassHello1!",
     "firstName": "Rambo",
-    "lastName": "Shenk"
+    "lastName": "Shenk",
+    "customUsername": "HelloUser123"
 }
 
 ###
@@ -17,3 +18,7 @@ Content-Type: application/json
     "email": "hello111@gmail.com",
     "password": "SomePassHello1!"
 }
+
+###
+GET http://localhost:5000/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImY0NDA1M2Q1LTgxMjctNDM3MS04YmIxLThmNGVlYTE5MWViYyIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJoZWxsbzExMUBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJoZWxsbzExMUBnbWFpbC5jb20iLCJGaXJzdE5hbWUiOiJSYW1ibyIsIkxhc3ROYW1lIjoiU2hlbmsiLCJDdXN0b21Vc2VybmFtZSI6IkhlbGxvVXNlcjEyMyIsImV4cCI6MTc1MzU4MTUyMiwiaXNzIjoiUXVpY2tTZWxsQVBJIiwiYXVkIjoiUXVpY2tTZWxsIn0.XKRElp7EoOl5B0QrkxUdfxudVYlDJt3PytBaz7w6ti0

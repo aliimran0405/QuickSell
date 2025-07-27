@@ -5,6 +5,7 @@ using QuickSell.Api.Data;
 using QuickSell.Api.Dtos;
 using QuickSell.Api.Entities;
 using QuickSell.Api.Mappers;
+using System.Security.Claims;
 
 namespace QuickSell.Api.Endpoints;
 
@@ -64,12 +65,14 @@ public static class ItemsEndpoints
                 item.ItemId,
                 item.Name,
                 item.ListedPrice,
+                item.Category,
                 item.Thumbnail,
                 item.MainImages,
                 item.Description,
                 item.UsedStatus,
                 item.PostCode,
-                item.Area
+                item.Area,
+                item.OwnerId
             );
 
             return Results.Ok(ItemDetailDto);
@@ -86,6 +89,7 @@ public static class ItemsEndpoints
             var usedStatus = form["usedStatus"].ToString();
             var postCode = form["postCode"].ToString();
             var area = form["area"].ToString();
+            var ownerId = form["ownerId"].ToString();
 
             var files = form.Files;
             var imageUrls = new List<string>();
@@ -133,11 +137,12 @@ public static class ItemsEndpoints
                 ListedPrice = listedPrice,
                 Category = category,
                 Thumbnail = thumbnail,
-                MainImages = mainImages, 
+                MainImages = mainImages,
                 Description = description,
                 UsedStatus = usedStatus,
                 PostCode = postCode,
-                Area = area
+                Area = area,
+                OwnerId = ownerId,
             };
 
             dbContext.Items.Add(itemWithDetails);
@@ -147,7 +152,7 @@ public static class ItemsEndpoints
         });
 
 
-        group.MapPut("/edit{id}", (int id, UpdateItemDto updatedItem, QuickSellContext dbContext) =>
+        group.MapPut("/edit/{id}", async (int id, HttpRequest request, QuickSellContext dbContext) =>
         {
             // Find the item we are looking for
             var existingItem = dbContext.Items.Find(id);
@@ -158,7 +163,64 @@ public static class ItemsEndpoints
                 return Results.NotFound();
             }
 
-            existingItem.UpdateEntity(updatedItem);
+            var form = await request.ReadFormAsync();
+
+            var name = form["name"].ToString();
+            var listedPrice = int.Parse(form["listedPrice"]);
+            var category = form["category"].ToString();
+            var description = form["description"].ToString();
+            var usedStatus = form["usedStatus"].ToString();
+            var postCode = form["postCode"].ToString();
+            var area = form["area"].ToString();
+            var ownerId = form["ownerId"].ToString();
+
+            var files = form.Files;
+            var imageUrls = new List<string>();
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets");
+
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            foreach (var file in files)
+            {
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                var uniqueFileName = Guid.NewGuid().ToString();
+                string savedFileName;
+
+                if (extension == ".heic")
+                {
+                    using var image = new MagickImage(file.OpenReadStream());
+                    image.Format = MagickFormat.Jpeg;
+
+                    savedFileName = uniqueFileName + ".jpg";
+                    var jpegPath = Path.Combine(uploadsFolder, savedFileName);
+                    await image.WriteAsync(jpegPath);
+                }
+                else
+                {
+                    savedFileName = uniqueFileName + extension;
+                    var filePath = Path.Combine(uploadsFolder, savedFileName);
+
+                    using var stream = new FileStream(filePath, FileMode.Create);
+                    await file.CopyToAsync(stream);
+                }
+
+                imageUrls.Add($"/assets/{savedFileName}");
+            }
+
+            var thumbnail = imageUrls.FirstOrDefault();
+            var mainImages = imageUrls.Skip(1).ToList();
+
+            existingItem.Name = name;
+            existingItem.ListedPrice = listedPrice;
+            existingItem.Category = category;
+            existingItem.Thumbnail = thumbnail;
+            existingItem.MainImages = mainImages;
+            existingItem.Description = description;
+            existingItem.UsedStatus = usedStatus;
+            existingItem.PostCode = postCode;
+            existingItem.Area = area;
+            existingItem.OwnerId = ownerId;
 
 
             dbContext.SaveChanges();
@@ -166,6 +228,40 @@ public static class ItemsEndpoints
             // Return 204
             return Results.NoContent();
         });
+
+        group.MapDelete("/{id}", (int id, QuickSellContext dbContext) =>
+        {
+            dbContext.Items.Where(item => item.ItemId == id).ExecuteDelete();
+
+            
+
+            return Results.NoContent();
+        });
+
+        group.MapGet("/user-items", (HttpContext context, QuickSellContext dbContext) =>
+        {
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var myItems = dbContext.Items
+                .Where(item => item.OwnerId == userId)
+                .Select(i => new ItemDto(
+                    i.ItemId,
+                    i.Name,
+                    i.ListedPrice,
+                    i.Category,
+                    i.Thumbnail,
+                    i.PostCode,
+                    i.Area
+                )).ToList();
+
+            return Results.Ok(myItems);
+        }).RequireAuthorization();
+
 
 
         return group;

@@ -1,14 +1,27 @@
 import { useState, useEffect } from "react";
 import CarouselComponent from "../Components/CarouselComponent";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import Modal from "../Components/Modal";
+import useCheckAuth from "../Utils/useCheckAuth";
+import { jwtDecode } from "jwt-decode";
 
 function ItemDetails() {
 
     const [item, setItem] = useState([]);
     const {itemId} = useParams();
-
+    const [toggleModal, setToggleModal] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
+    
     const navigate = useNavigate();
+    
+    // For my-page item page
+    const location = useLocation();
+    const {userData, loading} = useCheckAuth("getUserId"); // Look over loading attribute if it should be used like this or something better
+    const isAtMyPage = location.pathname.startsWith("/general-items/my-ads/");
+    
+
+    
 
     useEffect(() => {
         axios.get(`http://localhost:5000/general-items/${itemId}`)
@@ -17,18 +30,21 @@ function ItemDetails() {
             });
     }, []);
 
-    /* The information under should be assigned dynamically 
-    but for now it is simulated as backend for users is not ready */ 
-    //const isOwner = item.ownerId === user.id // should look something like this
-
-    const isOwner = true;
-
     useEffect(() => {
         document.title = item.name;
-    });
+    }, []);
+
+    if (!userData) return <p>Loading...</p>
+
+    
+
+    
 
     //let imagesArr = [];
+    //let isOwner = false;
     let isLoggedIn = false; // For testing only
+
+    
 
     // const combineImages = () => {
     //     imagesArr.push(item.thumbnail);
@@ -46,7 +62,16 @@ function ItemDetails() {
         navigate(`/general-items/edit/${itemId}`);
     }
 
+    const handleDeleteAd = async () => {
+        try {
+            const response = await axios.delete(`http://localhost:5000/general-items/${itemId}`);
+            navigate("/my-page");
+        } catch (error) {
+            console.log("Delete error");
+        }
+    }
 
+    
     return(
         <>
             <div className="custom-carousel-container">
@@ -85,9 +110,10 @@ function ItemDetails() {
             {isOwner && (
                 <div className="owner-section">
                     <button className="edit-btn" onClick={() => handleEditAd()}><span>Edit Ad</span></button>
-                    <button className="delete-btn" onClick={() => handleDeleteAd}><span>Delete Ad</span></button>
+                    <button className="delete-btn" onClick={() => setToggleModal(true)}><span>Delete Ad</span></button>
                 </div>
             )}
+            {toggleModal && <Modal titleText={<h1>Are you sure?</h1>} bodyText={<p>The changes can not be reverted.</p>}closeModal={setToggleModal} customFunction={handleDeleteAd}/>}
             <hr className="new-section" />
             <div className="item-data">
                 <p>Published: 04.05.2025</p>

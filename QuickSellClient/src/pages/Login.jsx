@@ -6,6 +6,7 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
+    const [test, setTest] = useState(null);
 
     const navigate = useNavigate();
 
@@ -14,16 +15,13 @@ function Login() {
 
         //rest of login handler under here
         try {
-            const response = await axios.post('http://localhost:5000/login-user', {
+            const response = await axios.post('http://localhost:5000/login', {
                     email: email, 
                     password: pwd
                 },
-                {
-                    withCredentials: true
-                }
             );
-            console.log("Login successful!", response.data);
-            localStorage.setItem("accessToken", response.data.accessToken);
+            setTest(response.data);
+            localStorage.setItem("token", response.data.token);
             navigate("/my-page");
         } catch (error) {
             console.error("Something failed", error);
@@ -32,6 +30,7 @@ function Login() {
     
     return(
         <form onSubmit={handleSubmit}>
+            {console.log(test)}
             <div className="login">
                 <div className="login-container">
                     <h2>Log in</h2>

@@ -20,8 +20,8 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:5000/general-items/4186
-Content-Type: application/json
+PUT http://localhost:5000/general-items/4202
+Content-Type: multipart/form-data
 
 {
     "Name": "Kul Skjorte",
