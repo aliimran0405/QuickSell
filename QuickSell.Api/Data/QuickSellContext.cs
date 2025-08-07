@@ -14,11 +14,13 @@ public class QuickSellContext : IdentityDbContext<UserProfile>
 
     public DbSet<Item> Items => Set<Item>();
 
+    public DbSet<Bid> Bids => Set<Bid>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        
+
         builder.Entity<UserProfile>(entity =>
         {
             entity.Property(u => u.FirstName)

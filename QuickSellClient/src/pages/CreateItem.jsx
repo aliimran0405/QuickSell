@@ -8,6 +8,7 @@ function CreateItem() {
 
     
     const {userData, loading} = useCheckAuth("getUserId");
+   
 
     const [name, setName] = useState("");
     const [isNameValid, setIsNameValid] = useState("");
@@ -60,6 +61,7 @@ function CreateItem() {
         }
     }, [isEditMode, itemId]);
 
+
     useEffect(() => {
         if (isEditMode && curItem) {
             setName(curItem.name);
@@ -74,22 +76,33 @@ function CreateItem() {
            
             //const previewUrls = curItem.mainImages.map(path => `http://localhost:5000/${path}`);
             
+            // Merge thumbnail and mainImages
             const allImageUrls = [`http://localhost:5000/${curItem.thumbnail}`, ...curItem.mainImages.map(path => `http://localhost:5000/${path}`)];
 
             setInitialPreviewUrls(allImageUrls);  
         }
     }, [curItem, isEditMode]);
 
-    if (!userData) return(<p>Loading...</p>);
+    // Client prevent unauthorized access to '/edit/id' that they do not own
+    useEffect(() => {
+        if (!loading && userData && userData.userId && curItem && curItem.ownerId) {
+            if (isEditMode && userData.userId != curItem.ownerId) {
+                navigate("/forbidden");
+            }
+        }
+    }, [loading, userData, curItem, isEditMode, navigate]);
+
+    if (loading) return <p>Loading...</p>;
     
-    const userId = userData.userId;
+    
+    //const userId = userData.userId;
 
     const handleCreateItemSubmit = async (e) => {
         e.preventDefault();
         setHasSubmitted(true);
         let valid = true;
         const formData = new FormData();
-            console.log("USERID: ", userId);
+            
 
             // Name validation
             if (name.trim() === "") {
@@ -167,7 +180,7 @@ function CreateItem() {
         formData.append("usedStatus", usedStatus);
         formData.append("postCode", postCode);
         formData.append("area", area);
-        formData.append("ownerId", userId);
+        formData.append("ownerId", userData.userId);
 
         imageFiles.forEach((file) => {
             formData.append("images", file);
@@ -187,9 +200,11 @@ function CreateItem() {
         else {
             try {
                 console.log("Edit mode!");
+                const token = localStorage.getItem("token");
                 const response = axios.put(`http://localhost:5000/general-items/edit/${itemId}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        "Authorization": `Bearer ${token}`
                     }
                 });
             } catch (error) {

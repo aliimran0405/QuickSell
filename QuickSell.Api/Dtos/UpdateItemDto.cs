@@ -10,5 +10,6 @@ public record class UpdateItemDto(
     string Description,
     string UsedStatus,
     string PostCode,
-    string Area
+    string Area,
+    string UpdatedAt
 );

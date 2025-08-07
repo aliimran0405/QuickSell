@@ -1,52 +1,68 @@
-import React, { useState, useEffect } from "react";
-import Card from "../Components/Card"
-import useCheckAuth from "../Utils/useCheckAuth";
+import { useEffect, useState } from "react";
+import SpotlightCard from "../Components/SpotlightCard/SpotlightCard";
+import default_img from "/default_profile_img.png"
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function MyPage() {
 
-    const [userItems, setUserItems] = useState([]);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const getUserItems = async () => {
+        const getUser = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await axios.get("http://localhost:5000/general-items/user-items", {
+                const response = await axios.get("http://localhost:5000/user", {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
                 });
-                setUserItems(response.data);
+                setUser(response.data);
             } catch (error) {
-                console.log("Error");
-                // Remember to navigate to '/login'
+                console.log(error);
+                navigate("/login");
+            } finally {
+                setLoading(false);
             }
         }
-        getUserItems();
-    }, []);
-    
+        getUser();
+    }, [loading]);
 
-    function handleLogout() {
-        localStorage.removeItem("token");
+    if (loading) {
+        return (<p>Loading...</p>)
     }
-    
 
-    return(
+    return (
         <>
-            {console.log(userItems)}
-            <h1 id="my-ads-header">Hello</h1>
             <hr className="new-section" />
-            <div className="my-page-container">
-                <h2 style={{color: "white"}}>My Ads</h2>
-                {userItems.length != 0 ? (userItems.map(item => (
-                    <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`http://localhost:5000/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
-                ))
-                ) : (<p style={{color: "white"}}>You have no listed items.</p>)}
-                <button onClick={() => handleLogout()}>Logout</button>
+            <div className="profile-info">
+                <img src={default_img} alt="" />
+                <div className="profile-info-details">
+                    <p id="full-name">{user.firstName + " " + user.lastName}</p>
+                    <p id="username">{user.customUsername}</p>
+                    <p id="email">{user.email}</p>
+                </div>
+            </div>
+            <div className="my-page-options">
+                <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+                    <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(75, 0, 130, 0.8)">
+                        <h1>Show my profile</h1>
+                        <p>Manage your profile information</p>
+                    </SpotlightCard>
+                </Link>
+
+                <Link to="/my-page/my-ads" style={{textDecoration: "none", color: "inherit"}}>
+                    <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(75, 0, 130, 0.8)">
+                        <h1>Show my ads</h1>
+                        <p>Check and manage your active ads</p>
+                    </SpotlightCard>
+                </Link>
             </div>
             <hr className="new-section" />
         </>
-    )
+    );
 }
 
 export default MyPage;

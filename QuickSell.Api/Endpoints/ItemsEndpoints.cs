@@ -72,11 +72,36 @@ public static class ItemsEndpoints
                 item.UsedStatus,
                 item.PostCode,
                 item.Area,
-                item.OwnerId
+                item.OwnerId,
+                item.CreatedAt.ToShortDateString(),
+                item.UpdatedAt.ToShortDateString()
             );
 
             return Results.Ok(ItemDetailDto);
         }).WithName(GetItemsEndpointName);
+
+        group.MapGet("/my-ads/{id}", async (int id, QuickSellContext dbContext, HttpContext context) =>
+        {
+            var item = await dbContext.Items.FindAsync(id);
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (item is null)
+            {
+                return Results.NotFound();
+            }
+
+
+            var MyItemDetailsDto = new MyItemDetailsDto(
+                item.ItemId,
+                item.Name,
+                item.ListedPrice,
+                item.Thumbnail,
+                item.OwnerId,
+                item.UpdatedAt.ToShortDateString()
+            );
+
+            return Results.Ok(MyItemDetailsDto);
+        }).RequireAuthorization();
 
         group.MapPost("/new", async (HttpRequest request, QuickSellContext dbContext) =>
         {
@@ -143,6 +168,8 @@ public static class ItemsEndpoints
                 PostCode = postCode,
                 Area = area,
                 OwnerId = ownerId,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             dbContext.Items.Add(itemWithDetails);
@@ -152,15 +179,24 @@ public static class ItemsEndpoints
         });
 
 
-        group.MapPut("/edit/{id}", async (int id, HttpRequest request, QuickSellContext dbContext) =>
+        group.MapPut("/edit/{id}", async (int id, HttpContext context, HttpRequest request, QuickSellContext dbContext) =>
         {
             // Find the item we are looking for
             var existingItem = dbContext.Items.Find(id);
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            Console.WriteLine($"[Edit] UserId from JWT: {userId}");
+            Console.WriteLine($"[Edit] OwnerId from DB: {existingItem.OwnerId}");
 
             // Return 404 is item does not exist
             if (existingItem is null)
             {
                 return Results.NotFound();
+            }
+
+            if (existingItem.OwnerId.ToString() != userId?.ToString())
+            {
+                return Results.Forbid();
             }
 
             var form = await request.ReadFormAsync();
@@ -221,22 +257,29 @@ public static class ItemsEndpoints
             existingItem.PostCode = postCode;
             existingItem.Area = area;
             existingItem.OwnerId = ownerId;
+            existingItem.UpdatedAt = DateTime.UtcNow;
 
 
             dbContext.SaveChanges();
 
             // Return 204
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
-        group.MapDelete("/{id}", (int id, QuickSellContext dbContext) =>
+        group.MapDelete("/{id}", (int id, HttpContext context, QuickSellContext dbContext) =>
         {
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var item = dbContext.Items.Find(id);
+
+            if (item.OwnerId.ToString() != userId.ToString())
+            {
+                return Results.Forbid();
+            }
+
             dbContext.Items.Where(item => item.ItemId == id).ExecuteDelete();
 
-            
-
             return Results.NoContent();
-        });
+        }).RequireAuthorization();
 
         group.MapGet("/user-items", (HttpContext context, QuickSellContext dbContext) =>
         {

@@ -27,7 +27,11 @@ public class Item
 
     public required string OwnerId { get; set; }
 
+    public required DateTime CreatedAt { get; set; }
 
-    //Username of owner
+    public required DateTime UpdatedAt { get; set; }
+
+
+    
 
 }

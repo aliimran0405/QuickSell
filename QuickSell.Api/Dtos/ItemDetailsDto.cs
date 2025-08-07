@@ -11,6 +11,8 @@ public record class ItemDetailsDto(
     string UsedStatus,
     string PostCode,
     string Area,
-    string OwnerId
+    string OwnerId,
+    string CreatedAt,
+    string UpdatedAt
 );
 

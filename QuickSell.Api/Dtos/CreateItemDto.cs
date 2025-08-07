@@ -12,5 +12,7 @@ public record class CreateItemDto
     string Description,
     string UsedStatus,
     string PostCode,
-    string Area
+    string Area,
+    string CreatedAt,
+    string UpdatedAt
 );

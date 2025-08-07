@@ -20,6 +20,7 @@ function GeneralItems() {
             });
     }, []);
 
+
     useEffect(() => {
         document.title = "General Items";
         const params = new URLSearchParams(location.search);

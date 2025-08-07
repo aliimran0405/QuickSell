@@ -10,42 +10,57 @@ function ItemDetails() {
 
     const [item, setItem] = useState([]);
     const {itemId} = useParams();
-    const [toggleModal, setToggleModal] = useState(false);
-    const [isOwner, setIsOwner] = useState(false);
+    
+    const [itemNotFound, setItemNotFound] = useState(false);
     
     const navigate = useNavigate();
     
-    // For my-page item page
-    const location = useLocation();
-    const {userData, loading} = useCheckAuth("getUserId"); // Look over loading attribute if it should be used like this or something better
-    const isAtMyPage = location.pathname.startsWith("/general-items/my-ads/");
+   
     
 
     
+
+    // useEffect(() => {
+    //     axios.get(`http://localhost:5000/general-items/${itemId}`)
+    //         .then(response => {
+    //             setItem(response.data);
+    //         });
+    // }, []);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/general-items/${itemId}`)
-            .then(response => {
-                setItem(response.data);
-            });
+            const fetchItemDetails = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:5000/general-items/${itemId}`);
+                    setItem(response.data);
+                } catch (error) {
+                    if (error.response) {
+                        if (error.response.status === 404) {
+                            setItemNotFound(true);
+                        }
+                    }
+                }
+            }
+        fetchItemDetails();
     }, []);
 
+    
     useEffect(() => {
         document.title = item.name;
     }, []);
 
-    if (!userData) return <p>Loading...</p>
-
     
 
     
 
+    
+
+    
     //let imagesArr = [];
     //let isOwner = false;
     let isLoggedIn = false; // For testing only
 
     
-
+    
     // const combineImages = () => {
     //     imagesArr.push(item.thumbnail);
     //     item.mainImages.map(img => 
@@ -58,18 +73,7 @@ function ItemDetails() {
         ...(Array.isArray(item.mainImages) ? item.mainImages : [])
     ];
 
-    const handleEditAd = () => {
-        navigate(`/general-items/edit/${itemId}`);
-    }
-
-    const handleDeleteAd = async () => {
-        try {
-            const response = await axios.delete(`http://localhost:5000/general-items/${itemId}`);
-            navigate("/my-page");
-        } catch (error) {
-            console.log("Delete error");
-        }
-    }
+    
 
     
     return(
@@ -107,17 +111,12 @@ function ItemDetails() {
                 }
             </div>
             
-            {isOwner && (
-                <div className="owner-section">
-                    <button className="edit-btn" onClick={() => handleEditAd()}><span>Edit Ad</span></button>
-                    <button className="delete-btn" onClick={() => setToggleModal(true)}><span>Delete Ad</span></button>
-                </div>
-            )}
-            {toggleModal && <Modal titleText={<h1>Are you sure?</h1>} bodyText={<p>The changes can not be reverted.</p>}closeModal={setToggleModal} customFunction={handleDeleteAd}/>}
+            
+            
             <hr className="new-section" />
             <div className="item-data">
-                <p>Published: 04.05.2025</p>
-                <p>Last changed: 23.06.2025</p>
+                <p>Published: {item.createdAt}</p>
+                <p>Last changed: {item.updatedAt}</p>
                 <p>QuickSell-code: {item.itemId}</p>
             </div>
             
