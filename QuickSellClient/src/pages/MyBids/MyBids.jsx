@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./MyBids.css";
 import axios from "axios";
+import API_BASE_URL from "../../../api";
 
 function MyBids() {
 
@@ -11,7 +12,7 @@ function MyBids() {
         const fetchAllBids = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await axios.get("http://localhost:5000/bids/my-bids", {
+                const response = await axios.get(`${API_BASE_URL}/bids/my-bids`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
@@ -34,7 +35,7 @@ function MyBids() {
     const handleDeleteBid = async (bidId) => {
         try {
             const token = localStorage.getItem("token");
-            const response = axios.delete(`http://localhost:5000/bids/delete/${bidId}`, {
+            const response = axios.delete(`${API_BASE_URL}/bids/delete/${bidId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }

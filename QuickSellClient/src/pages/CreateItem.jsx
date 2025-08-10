@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import useCheckAuth from "../Utils/useCheckAuth";
+import API_BASE_URL from "../../api";
 
 function CreateItem() {
 
@@ -54,7 +55,7 @@ function CreateItem() {
         
         if (isEditMode) {
             
-            axios.get(`http://localhost:5000/general-items/${itemId}`)
+            axios.get(`${API_BASE_URL}/general-items/${itemId}`)
                 .then(response => {
                     setCurItem(response.data);
                 });
@@ -77,7 +78,7 @@ function CreateItem() {
             //const previewUrls = curItem.mainImages.map(path => `http://localhost:5000/${path}`);
             
             // Merge thumbnail and mainImages
-            const allImageUrls = [`http://localhost:5000/${curItem.thumbnail}`, ...curItem.mainImages.map(path => `http://localhost:5000/${path}`)];
+            const allImageUrls = [`${API_BASE_URL}/${curItem.thumbnail}`, ...curItem.mainImages.map(path => `${API_BASE_URL}/${path}`)];
 
             setInitialPreviewUrls(allImageUrls);  
         }
@@ -188,7 +189,7 @@ function CreateItem() {
 
         if (!isEditMode) {
             try {
-                const response = axios.post("http://localhost:5000/general-items/new", formData, {
+                const response = axios.post(`${API_BASE_URL}/general-items/new`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                     }
@@ -201,7 +202,7 @@ function CreateItem() {
             try {
                 console.log("Edit mode!");
                 const token = localStorage.getItem("token");
-                const response = axios.put(`http://localhost:5000/general-items/edit/${itemId}`, formData, {
+                const response = axios.put(`${API_BASE_URL}/general-items/edit/${itemId}`, formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "Authorization": `Bearer ${token}`

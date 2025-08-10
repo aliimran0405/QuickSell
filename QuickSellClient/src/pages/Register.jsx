@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Aurora from "../Components/Aurora";
+import API_BASE_URL from "../../api";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{6,19}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%]).{8,24}$/;
@@ -68,7 +69,7 @@ function Register() {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/register", {
+            const response = await fetch(`${API_BASE_URL}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userName: email, email: email, password: pwd, firstName, lastName, customUsername: user })

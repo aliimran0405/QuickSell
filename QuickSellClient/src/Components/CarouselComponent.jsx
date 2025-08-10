@@ -1,5 +1,6 @@
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import API_BASE_URL from "../../api.js";
 
 // Uses pre-made react-multi-carousel: https://www.npmjs.com/package/react-multi-carousel
 
@@ -45,7 +46,7 @@ function CarouselComponent(props) {
 
             {props.mainImages && props.mainImages.map(img => (
                 <div className="carousel-item-wrapper">
-                    <img className="carousel-img" src={`http://localhost:5000/${img}`} alt="2" />
+                    <img className="carousel-img" src={`${API_BASE_URL}/${img}`} alt="2" />
                 </div>
             ))}
             

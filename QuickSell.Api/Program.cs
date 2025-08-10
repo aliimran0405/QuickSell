@@ -13,6 +13,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "TestSecretKey12345678!!!MoreBytes";
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 var issuer = builder.Configuration["Jwt:Issuer"] ?? "QuickSellAPI";

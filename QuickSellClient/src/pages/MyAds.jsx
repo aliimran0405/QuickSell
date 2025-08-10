@@ -3,6 +3,7 @@ import Card from "../Components/Card"
 import useCheckAuth from "../Utils/useCheckAuth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../../api";
 
 function MyAds() {
 
@@ -32,12 +33,12 @@ function MyAds() {
                 const token = localStorage.getItem("token");
 
                 const [userItemsRes, userDataRes] = await Promise.all([
-                    axios.get("http://localhost:5000/general-items/user-items", {
+                    axios.get(`${API_BASE_URL}/general-items/user-items`, {
                         headers: {
                             "Authorization": `Bearer ${token}`,
                         }
                     }),
-                    axios.get("http://localhost:5000/user", {
+                    axios.get(`${API_BASE_URL}/user`, {
                         headers: {
                             "Authorization": `Bearer ${token}`,
                         }
@@ -77,7 +78,7 @@ function MyAds() {
             <div className="my-page-container">
                 <h2 style={{color: "white"}}>My Ads</h2>
                 {userItems.length != 0 ? (userItems.map(item => (
-                    <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`http://localhost:5000/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
+                    <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
                 ))
                 ) : (<p style={{color: "white"}}>You have no listed items.</p>)}
                 <button onClick={() => handleLogout()}>Logout</button>

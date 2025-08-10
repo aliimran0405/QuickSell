@@ -1,6 +1,7 @@
 import Card from "../Components/Card";
 import Filter from "../Components/Filter";
 import axios from 'axios';
+import API_BASE_URL from "../../api.js";
 
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
@@ -14,7 +15,7 @@ function GeneralItems() {
     const [filteredItems, setFilteredItems] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/general-items')
+        axios.get(`${API_BASE_URL}/general-items`)
             .then(response => {
                 setItems(response.data);
             });
@@ -49,7 +50,7 @@ function GeneralItems() {
                         <p className="no-items-text">No listed items for this category</p>
                     ) : (
                         filteredItems.map(item => (
-                            <Card linkTo={"/general-items"} id={item.itemId} thumbnail={`http://localhost:5000/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
+                            <Card linkTo={"/general-items"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
                     )))}
                 </div>
             </div>

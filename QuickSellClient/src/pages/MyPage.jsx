@@ -3,6 +3,7 @@ import SpotlightCard from "../Components/SpotlightCard/SpotlightCard";
 import default_img from "/default_profile_img.png"
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../api";
 
 function MyPage() {
 
@@ -14,7 +15,7 @@ function MyPage() {
         const getUser = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await axios.get("http://localhost:5000/user", {
+                const response = await axios.get(`${API_BASE_URL}/user`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }

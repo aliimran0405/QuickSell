@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "../Components/Modal";
 import { useNavigate, Link } from "react-router-dom";
+import API_BASE_URL from "../../api";
 
 function MyItemDetails() {
 
@@ -23,12 +24,12 @@ function MyItemDetails() {
                 const token = localStorage.getItem("token");
                 const [itemDetailsRes, receivedBidsRes] = await Promise.all([
 
-                    axios.get(`http://localhost:5000/general-items/my-ads/${itemId}`, {
+                    axios.get(`${API_BASE_URL}/general-items/my-ads/${itemId}`, {
                         headers: {
                             "Authorization": `Bearer ${token}`
                         }
                     }),
-                    axios.get("http://localhost:5000/bids/received-bids", {
+                    axios.get(`${API_BASE_URL}/bids/received-bids`, {
                         headers: {
                             "Authorization": `Bearer ${token}`
                         }
@@ -52,7 +53,7 @@ function MyItemDetails() {
     const handleDeleteAd = async () => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.delete(`http://localhost:5000/general-items/${itemId}`, {
+            const response = await axios.delete(`${API_BASE_URL}/general-items/${itemId}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -66,7 +67,7 @@ function MyItemDetails() {
     const handleDeclineBid = async (bidId) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(`http://localhost:5000/bids/change-status/${bidId}`, {
+            const response = await axios.post(`${API_BASE_URL}/bids/change-status/${bidId}`, {
                 newStatus: -1
             },
             {
@@ -97,7 +98,7 @@ function MyItemDetails() {
     const handleAcceptBid = async (bidId) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(`http://localhost:5000/bids/change-status/${bidId}`, {
+            const response = await axios.post(`${API_BASE_URL}/bids/change-status/${bidId}`, {
                 newStatus: 1
             },
             {
@@ -129,7 +130,7 @@ function MyItemDetails() {
             <Link to={`/general-items/${itemId}`} style={{textDecoration: "none", color: "inherit"}}>
             <div className="ad-preview-container">
                 <div className="ad-image-wrapper">
-                    <img src={`http://localhost:5000/${itemDetails.thumbnail}`} alt={itemDetails.thumbnail} className="ad-thumbnail" />
+                    <img src={`${API_BASE_URL}/${itemDetails.thumbnail}`} alt={itemDetails.thumbnail} className="ad-thumbnail" />
                 </div>
                 
                 <div className="ad-content">

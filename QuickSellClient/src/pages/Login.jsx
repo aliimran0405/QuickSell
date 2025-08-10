@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
 import Aurora from "../Components/Aurora";
+import API_BASE_URL from "../../api";
 
 function Login() {
 
@@ -21,7 +22,7 @@ function Login() {
 
         //rest of login handler under here
         try {
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post(`${API_BASE_URL}/login`, {
                     email: email, 
                     password: pwd
                 },

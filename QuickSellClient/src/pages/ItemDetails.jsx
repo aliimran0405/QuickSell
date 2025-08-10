@@ -5,6 +5,7 @@ import axios from "axios";
 import Modal from "../Components/Modal";
 import useCheckAuth from "../Utils/useCheckAuth";
 import { jwtDecode } from "jwt-decode";
+import API_BASE_URL from "../../api";
 
 function ItemDetails() {
 
@@ -35,8 +36,8 @@ function ItemDetails() {
         const fetchItemDetails = async () => {
             try {
                 const [itemsResponse, bidsResponse] = await Promise.all([
-                    axios.get(`http://localhost:5000/general-items/${itemId}`),
-                    axios.get(`http://localhost:5000/bids/item/${itemId}`)
+                    axios.get(`${API_BASE_URL}/general-items/${itemId}`),
+                    axios.get(`${API_BASE_URL}/bids/item/${itemId}`)
                 ]);
                 setItem(itemsResponse.data);
                 setBids(bidsResponse.data);
@@ -85,7 +86,7 @@ function ItemDetails() {
 
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post("http://localhost:5000/bids/place-bid", {
+            const response = await axios.post(`${API_BASE_URL}/bids/place-bid`, {
                 itemId: itemId,
                 bidAmount: bidAmount
             }, 
