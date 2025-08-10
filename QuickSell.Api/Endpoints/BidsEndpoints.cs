@@ -89,17 +89,16 @@ public static class BidsEndpoints
             return Results.Ok(receivedBids);
         }).RequireAuthorization();
 
-        group.MapDelete("/delete-bid/{bidId}", async (int bidId, QuickSellContext dbContext, HttpContext context) =>
+        group.MapDelete("/delete/{bidId}", async (int bidId, QuickSellContext dbContext, HttpContext context) =>
         {
-            var ownerId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (ownerId is null)
+            if (userId is null)
             {
                 return Results.Unauthorized();
             }
 
             var bidToDelete = await dbContext.Bids
-                .Include(b => b.Item)
                 .FirstOrDefaultAsync(b => b.BidId == bidId);
 
             // If the repsective bid does not exist
@@ -109,7 +108,7 @@ public static class BidsEndpoints
             }
             
             // Avoid mismatch
-            if (bidToDelete.Item.OwnerId != ownerId)
+            if (bidToDelete.UserId != userId)
             {
                 return Results.Forbid();
             }
@@ -127,15 +126,71 @@ public static class BidsEndpoints
         group.MapGet("/my-bids", async (QuickSellContext dbContext, HttpContext context) =>
         {
             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userId is null) return Results.Unauthorized();
+            if (userId is null)
+            {
+                return Results.Unauthorized();
+            }
 
-            var myBids = await dbContext.Bids
-                .Where(b => b.UserId == userId)
-                .Include(b => b.Item)
-                .OrderByDescending(b => b.PostedAt)
-                .ToListAsync();
+            var myBids = await (
+                from b in dbContext.Bids
+                where b.UserId == userId
+                join i in dbContext.Items on b.ItemId equals i.ItemId
+                join u in dbContext.Users on i.OwnerId equals u.Id
+                orderby b.PostedAt descending
+                select new
+                {
+                    Bid = b,
+                    Item = i,
+                    OwnerEmail = b.BidStatus == 1 ? new { u.Email } : null
+                }).ToListAsync();
+
 
             return Results.Ok(myBids);
+        }).RequireAuthorization();
+
+        group.MapPost("/change-status/{bidId}", async (int bidId, QuickSellContext dbContext, HttpContext context, ChangeBidStatusDto request) =>
+        {
+            var ownerId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (ownerId is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            if (request.NewStatus != 1 && request.NewStatus != -1)
+            {
+                return Results.BadRequest();
+            }
+
+            var bid = await dbContext.Bids
+                .Include(b => b.Item)
+                .FirstOrDefaultAsync(b => b.BidId == bidId);
+
+            if (bid is null)
+            {
+                return Results.NotFound();
+            }
+
+            if (bid.Item.OwnerId != ownerId)
+            {
+                return Results.Forbid();
+            }
+
+            if (request.NewStatus == 1)
+            {
+                bool alreadyAccepted = await dbContext.Bids
+                    .AnyAsync(b => b.ItemId == b.ItemId && b.BidStatus == 1);
+
+                if (alreadyAccepted)
+                {
+                    return Results.Conflict();
+                }
+            }
+
+            bid.BidStatus = request.NewStatus;
+            await dbContext.SaveChangesAsync();
+
+            return Results.Ok(new { message = "Bid status updated successfully", bidId = bid.BidId, status = bid.BidStatus });
+            
         }).RequireAuthorization();
         return group;
     }

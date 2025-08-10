@@ -66,7 +66,10 @@ function MyItemDetails() {
     const handleDeclineBid = async (bidId) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.delete(`http://localhost:5000/bids/delete-bid/${bidId}`, {
+            const response = await axios.post(`http://localhost:5000/bids/change-status/${bidId}`, {
+                newStatus: -1
+            },
+            {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
@@ -90,6 +93,30 @@ function MyItemDetails() {
             }
         }
     }
+
+    const handleAcceptBid = async (bidId) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.post(`http://localhost:5000/bids/change-status/${bidId}`, {
+                newStatus: 1
+            },
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+        } catch (error) {
+            if (error.response) {
+                switch(error.response.status) {
+                    case 409:
+                        alert("You have already accepted a bid for this item");
+                }
+            }
+        }
+    }
+
+    const anyBidAccepted = receivedBids?.some(bid => bid.bidStatus === 1);
+
 
     if (loading) {
         return (<p>Loading...</p>)
@@ -134,8 +161,8 @@ function MyItemDetails() {
                         <p>{bids.user.customUsername}</p>
                         <p>{bids.bidAmount},-</p>
                         <div className="accept-decline-btns">
-                            <button id="accept-btn">Accept</button>
-                            <button id="decline-btn" onClick={() => handleDeclineBid(bids.bidId)}>Decline</button>
+                            <button id="accept-btn" onClick={() => handleAcceptBid(bids.bidId)} disabled={anyBidAccepted}>Accept</button>
+                            <button id="decline-btn" onClick={() => handleDeclineBid(bids.bidId)} disabled={bids.bidStatus === 1}>Decline</button>
                         </div>
                     </div>
                 )) 

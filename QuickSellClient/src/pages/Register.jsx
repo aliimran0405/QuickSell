@@ -61,6 +61,12 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (pwd != matchPwd) {
+            setErrMsg("Passwords do not match");
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:5000/register", {
                 method: "POST",
@@ -108,6 +114,7 @@ function Register() {
                 <section className="input-box">
                     <input type="password" name="re-enter-password" placeholder="Re-enter Password" onChange={(e) => setMatchPwd(e.target.value)}/>
                     <i className="bx bxs-lock-alt"></i>
+                    {errMsg && <p style={{color: "red"}}>{errMsg}</p>}
                 </section>
                 <section className="input-box">
                     <input type="text" name="first-name" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>

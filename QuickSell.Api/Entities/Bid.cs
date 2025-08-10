@@ -16,5 +16,7 @@ public class Bid
 
     public DateTime PostedAt { get; set; }
 
-    public bool WinningBid { get; set; } = false;
+    //public bool WinningBid { get; set; } = false;
+
+    public int BidStatus { get; set; } = 0; // -1 = declined, 0 = pending, 1 = accepted
 }
