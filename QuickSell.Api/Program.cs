@@ -76,7 +76,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontEnd", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "https://quicksell-wrpw.onrender.com")
               .AllowCredentials()
               .AllowAnyHeader()
               .AllowAnyMethod();
