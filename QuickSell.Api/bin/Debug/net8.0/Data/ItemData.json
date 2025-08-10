@@ -1,0 +1,36 @@
+[
+    {
+        "Name": "Wrench for sale",
+        "ListedPrice": 100,
+        "Category": "tools",
+        "Thumbnail": "/assets/wrench_test_img.jpeg",
+        "MainImages": [
+            "assets/wrench_main_1.webp",
+            "assets/wrench_main_2.jpeg"
+        ],
+        "Description": "Heavy-duty 12-inch adjustable wrench in excellent condition. Made from high-carbon steel with a rust-resistant chrome finish. Easy to adjust, comfortable to hold, and perfect for home repairs, plumbing, or automotive work. Only used a couple of times. Selling because I have a duplicate. Available for pickup in Trondheim or local delivery.",
+        "UsedStatus": "Used - Visibly Used",
+        "PostCode": "2013",
+        "Area": "Skjetten",
+        "OwnerId": "123",
+        "CreatedAt": "2025-07-31T12:34:56.789Z",
+        "UpdatedAt": "2025-07-31T12:34:56.789Z"
+    },
+    {
+        "Name": "BRAND NEW HEADPHONES FOR SALE",
+        "ListedPrice": 1500,
+        "Category": "electronics",
+        "Thumbnail": "/assets/headphone_test_img.jpeg",
+        "MainImages": [
+            "assets/headphones_main_1.webp",
+            "assets/headphones_main_2.jpeg"
+        ],
+        "Description": "Brand new headphones for sale!",
+        "UsedStatus": "New - Packaging Included",
+        "PostCode": "2010",
+        "Area": "Strømmen",
+        "OwnerId": "321",
+        "CreatedAt": "2025-07-31T12:34:56.789Z",
+        "UpdatedAt": "2025-07-31T12:34:56.789Z"
+    }
+]
