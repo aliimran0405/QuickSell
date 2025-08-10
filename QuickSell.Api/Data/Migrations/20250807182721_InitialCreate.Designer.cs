@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuickSell.Api.Data;
 
@@ -11,9 +12,11 @@ using QuickSell.Api.Data;
 namespace QuickSell.Api.Data.Migrations
 {
     [DbContext(typeof(QuickSellContext))]
-    partial class QuickSellContextModelSnapshot : ModelSnapshot
+    [Migration("20250807182721_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,16 +177,9 @@ namespace QuickSell.Api.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("WinningBid")
-                        .HasColumnType("bit");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BidId");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bids");
                 });
@@ -371,25 +367,6 @@ namespace QuickSell.Api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("QuickSell.Api.Entities.Bid", b =>
-                {
-                    b.HasOne("QuickSell.Api.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QuickSell.Api.Entities.UserProfile", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

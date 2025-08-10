@@ -9,9 +9,12 @@ import { jwtDecode } from "jwt-decode";
 function ItemDetails() {
 
     const [item, setItem] = useState([]);
+    const [bids, setBids] = useState([]);
     const {itemId} = useParams();
     
     const [itemNotFound, setItemNotFound] = useState(false);
+
+    const [bidAmount, setBidAmount] = useState(0);
     
     const navigate = useNavigate();
     
@@ -27,19 +30,24 @@ function ItemDetails() {
     //         });
     // }, []);
 
+
     useEffect(() => {
-            const fetchItemDetails = async () => {
-                try {
-                    const response = await axios.get(`http://localhost:5000/general-items/${itemId}`);
-                    setItem(response.data);
-                } catch (error) {
-                    if (error.response) {
-                        if (error.response.status === 404) {
-                            setItemNotFound(true);
-                        }
+        const fetchItemDetails = async () => {
+            try {
+                const [itemsResponse, bidsResponse] = await Promise.all([
+                    axios.get(`http://localhost:5000/general-items/${itemId}`),
+                    axios.get(`http://localhost:5000/bids/item/${itemId}`)
+                ]);
+                setItem(itemsResponse.data);
+                setBids(bidsResponse.data);
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        setItemNotFound(true);
                     }
                 }
             }
+        }
         fetchItemDetails();
     }, []);
 
@@ -73,7 +81,23 @@ function ItemDetails() {
         ...(Array.isArray(item.mainImages) ? item.mainImages : [])
     ];
 
-    
+    const handleSubmittedBid = async () => {
+
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.post("http://localhost:5000/bids/place-bid", {
+                itemId: itemId,
+                bidAmount: bidAmount
+            }, 
+            {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                }
+            });
+        } catch (error) {
+            console.log("Bid post error");
+        }
+    }
 
     
     return(
@@ -92,7 +116,21 @@ function ItemDetails() {
                 <div className="used-status-info">
                     <p>{item.usedStatus}</p>
                 </div>
-                <button className="bid-button">
+                <div className="all-bids">
+                    {console.log(bids)}
+                    <h3>Current Bids</h3>
+                    {bids && bids.length > 0 ? bids.map(b => (
+                        <div className="bid-row">
+                            <p>{b.user.customUsername}</p>
+                            <p>{b.bidAmount},-</p>
+                        </div>
+                    )) : <p>No bids are currently posted for this item</p>}
+                </div>
+                <div>
+                    <label htmlFor="bid-amount">Enter bid amount</label>
+                    <input type="number" id="bid-amount" onChange={(e) => setBidAmount(e.target.value)}/>
+                </div>
+                <button className="bid-button" onClick={() => handleSubmittedBid()}>
                     <span>Place Bid</span>
                 </button>
             </div>

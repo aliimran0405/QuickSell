@@ -10,7 +10,8 @@ public class UserProfile : IdentityUser
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
-    
+
     public string? CustomUsername { get; set; }
 
+    
 }

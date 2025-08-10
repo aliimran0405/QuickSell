@@ -29,6 +29,20 @@ public class QuickSellContext : IdentityDbContext<UserProfile>
             entity.Property(u => u.LastName)
                   .HasMaxLength(100);
         });
+
+        builder.Entity<Bid>()
+            .HasOne(b => b.Item)
+            .WithMany() // or .WithMany(i => i.Bids) if you add List<Bid> in Item
+            .HasForeignKey(b => b.ItemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Bid>()
+            .HasOne(b => b.User)
+            .WithMany() // or .WithMany(u => u.Bids) if you add List<Bid> in UserProfile
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 
 }

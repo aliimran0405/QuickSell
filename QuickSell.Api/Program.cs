@@ -118,6 +118,7 @@ db.Items.AddRange(items);
 db.SaveChanges();
 
 
+
 //app.MapIdentityApi<UserProfile>();
 
 app.UseCors("AllowFrontEnd");
@@ -131,5 +132,19 @@ app.UseStaticFiles();
 app.MapItemsEndpoints();
 
 app.MapUsersEndpoints();
+
+// Seed test users at startup (for testing only)
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserProfile>>();
+if (!db.Users.Any())
+{
+    var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
+    var result = await userManager.CreateAsync(testUser, "alii2002");
+
+    var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
+    var result2 = await userManager.CreateAsync(testUser2, "alii2002");
+    
+}
+
+app.MapBidsEndpoints();
 
 app.Run();

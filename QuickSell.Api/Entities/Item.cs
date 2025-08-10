@@ -26,10 +26,13 @@ public class Item
     public required string Area { get; set; }
 
     public required string OwnerId { get; set; }
+    
 
     public required DateTime CreatedAt { get; set; }
 
     public required DateTime UpdatedAt { get; set; }
+
+   
 
 
     

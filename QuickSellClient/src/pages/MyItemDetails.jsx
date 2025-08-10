@@ -9,6 +9,7 @@ function MyItemDetails() {
 
     const {itemId} = useParams();
     const [itemDetails, setItemDetails] = useState(null);
+    const [receivedBids, setReceivedBids] = useState(null);
     const [loading, setLoading] = useState(true);
     const [toggleModal, setToggleModal] = useState(false);
     const navigate = useNavigate();
@@ -20,12 +21,21 @@ function MyItemDetails() {
         const getMyItemDetails = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const response = await axios.get(`http://localhost:5000/general-items/my-ads/${itemId}`, {
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-                setItemDetails(response.data);
+                const [itemDetailsRes, receivedBidsRes] = await Promise.all([
+
+                    axios.get(`http://localhost:5000/general-items/my-ads/${itemId}`, {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }),
+                    axios.get("http://localhost:5000/bids/received-bids", {
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    })
+                ]);
+                setItemDetails(itemDetailsRes.data);
+                setReceivedBids(receivedBidsRes.data);
             } catch (error) {
                 console.log("");
             } finally {
@@ -50,6 +60,34 @@ function MyItemDetails() {
             navigate("/my-page");
         } catch (error) {
             console.log("Delete error");
+        }
+    }
+
+    const handleDeclineBid = async (bidId) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.delete(`http://localhost:5000/bids/delete-bid/${bidId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            setReceivedBids(prev => prev.filter(b => b.bidId !== bidId));
+        } catch (error) {
+            if (error.response) {
+                switch (error.response.status) {
+                    case 401:
+                        console.log("401 error");
+                        break;
+                    case 404:
+                        console.log("404 error");
+                        break;
+                    case 403:
+                        console.log("403 error");
+                        break
+                    default:
+                        console.log(error);
+                }
+            }
         }
     }
 
@@ -87,24 +125,27 @@ function MyItemDetails() {
             <hr className="new-section" />
             
             <div className="bid-info-status-container">
-                <div className="bid-info-container">
-                    <h3 id="active-bids-header">Active bids</h3>
-                    <hr />
-                    <p>Username of bidder</p>
-                    <p>Bid amount</p>
-                    <div className="accept-decline-btns">
-                        <button id="accept-btn">Accept</button>
-                        <button id="decline-btn">Decline</button>
+
+                
+                {receivedBids && receivedBids.length > 0 ? receivedBids.map(bids => (
+                    <div className="bid-info-container">
+                        <h3 id="active-bids-header">Active bids</h3>
+                        <hr />
+                        <p>{bids.user.customUsername}</p>
+                        <p>{bids.bidAmount},-</p>
+                        <div className="accept-decline-btns">
+                            <button id="accept-btn">Accept</button>
+                            <button id="decline-btn" onClick={() => handleDeclineBid(bids.bidId)}>Decline</button>
+                        </div>
                     </div>
-                    <hr />
-                    <p>Username of bidder</p>
-                    <p>Bid amount</p>
-                    <div className="accept-decline-btns">
-                        <button id="accept-btn">Accept</button>
-                        <button id="decline-btn">Decline</button>
+                )) 
+                : 
+                (
+                    <div className="bid-info-container">
+                        <h3 id="active-bids-header">Active bids</h3>
+                        <p>Your item has not received any bids yet</p>
                     </div>
-                    <hr />
-                </div>
+                )}
                 <div className="status-container">
                     <p>Status: {isActive ? 
                             <span className="active-status" style={{border: "1px solid limegreen", backgroundColor: "limegreen"}}>Active</span> 

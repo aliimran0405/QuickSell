@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Route, Routes } from 'react-router-dom';
 import GeneralItems from './pages/GeneralItems';
 import ItemDetails from './pages/ItemDetails';
@@ -12,10 +12,12 @@ import Forbidden from './Components/Forbidden';
 import Landing from './pages/Landing';
 import MyItemDetails from './pages/MyItemDetails';
 import MyAds from './pages/MyAds';
+import MyBids from './pages/MyBids/MyBids';
 
 
 
 function App() {
+
   return(
     <>
       <Nav />
@@ -28,6 +30,7 @@ function App() {
         <Route path='/login' element={<Login />}/>
         <Route path='/my-page' element={<MyPage />}/>
         <Route path='/my-page/my-ads' element={<MyAds />}/>
+        <Route path='/my-page/my-bids' element={<MyBids />}/>
         <Route path='/general-items/new' element={<CreateItem />}/>
         <Route path='/general-items/edit/:itemId' element={<CreateItem />}/>
         <Route path='/test' element={<Modal />}/>

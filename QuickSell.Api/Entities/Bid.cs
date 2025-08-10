@@ -15,4 +15,6 @@ public class Bid
     public int BidAmount { get; set; }
 
     public DateTime PostedAt { get; set; }
+
+    public bool WinningBid { get; set; } = false;
 }

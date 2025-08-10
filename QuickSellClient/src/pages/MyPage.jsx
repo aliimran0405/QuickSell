@@ -46,7 +46,7 @@ function MyPage() {
                 </div>
             </div>
             <div className="my-page-options">
-                <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+                <Link to="/my-page/my-profile" style={{textDecoration: "none", color: "inherit"}}>
                     <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(75, 0, 130, 0.8)">
                         <h1>Show my profile</h1>
                         <p>Manage your profile information</p>
@@ -57,6 +57,13 @@ function MyPage() {
                     <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(75, 0, 130, 0.8)">
                         <h1>Show my ads</h1>
                         <p>Check and manage your active ads</p>
+                    </SpotlightCard>
+                </Link>
+
+                <Link to="/my-page/my-bids" style={{textDecoration: "none", color: "inherit"}}>
+                    <SpotlightCard className="custom-spotlight-card" spotlightColor="rgba(75, 0, 130, 0.8)">
+                        <h1>Show my bids</h1>
+                        <p>Manage your active bids and see their status</p>
                     </SpotlightCard>
                 </Link>
             </div>
