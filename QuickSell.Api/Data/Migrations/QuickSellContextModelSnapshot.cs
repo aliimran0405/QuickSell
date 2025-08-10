@@ -17,7 +17,7 @@ namespace QuickSell.Api.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -214,7 +214,7 @@ namespace QuickSell.Api.Data.Migrations
                     b.Property<int>("ListedPrice")
                         .HasColumnType("int");
 
-                    b.PrimitiveCollection<string>("MainImages")
+                    b.Property<string>("MainImages")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

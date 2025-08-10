@@ -12,7 +12,7 @@ using QuickSell.Api.Data;
 namespace QuickSell.Api.Data.Migrations
 {
     [DbContext(typeof(QuickSellContext))]
-    [Migration("20250807182721_InitialCreate")]
+    [Migration("20250810224342_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace QuickSell.Api.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.6")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -169,6 +169,9 @@ namespace QuickSell.Api.Data.Migrations
                     b.Property<int>("BidAmount")
                         .HasColumnType("int");
 
+                    b.Property<int>("BidStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
@@ -177,9 +180,13 @@ namespace QuickSell.Api.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("BidId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bids");
                 });
@@ -210,7 +217,7 @@ namespace QuickSell.Api.Data.Migrations
                     b.Property<int>("ListedPrice")
                         .HasColumnType("int");
 
-                    b.PrimitiveCollection<string>("MainImages")
+                    b.Property<string>("MainImages")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -367,6 +374,25 @@ namespace QuickSell.Api.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("QuickSell.Api.Entities.Bid", b =>
+                {
+                    b.HasOne("QuickSell.Api.Entities.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuickSell.Api.Entities.UserProfile", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
