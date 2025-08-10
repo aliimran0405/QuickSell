@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
@@ -20,7 +18,7 @@ var jwtKey = builder.Configuration["Jwt:Key"] ?? "TestSecretKey12345678!!!MoreBy
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 var issuer = builder.Configuration["Jwt:Issuer"] ?? "QuickSellAPI";
 
-// Db setup -- see 'appsettings.json'
+// Db setup
 var connString = builder.Configuration.GetConnectionString("QuickSell");
 builder.Services.AddSqlServer<QuickSellContext>(connString);
 
@@ -46,16 +44,13 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddIdentityCore<UserProfile>(options =>
 {
-    // Disable account lockout
     options.Lockout.AllowedForNewUsers = false;
     options.Lockout.MaxFailedAccessAttempts = int.MaxValue;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
 
-    // Disable email confirmation
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
 
-    // Simplify password rules
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -66,10 +61,6 @@ builder.Services.AddIdentityCore<UserProfile>(options =>
 .AddDefaultTokenProviders()
 .AddSignInManager();
 
-
-
-//builder.Services.AddIdentityApiEndpoints<UserProfile>();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -77,7 +68,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromHours(1);
-    options.LoginPath = "/login"; // optional
+    options.LoginPath = "/login";
     options.SlidingExpiration = true;
 });
 
@@ -100,54 +91,57 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<QuickSellContext>();
-
-// Temporary solution to remove and seed data to db to test dtos 
-if (db.Items.Any())
+using (var scope = app.Services.CreateScope())
 {
-    db.Items.RemoveRange(db.Items);
-    db.SaveChanges();
+    var db = scope.ServiceProvider.GetRequiredService<QuickSellContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserProfile>>();
+
+    if (app.Environment.IsDevelopment())
+    {
+        // Always clear & reseed in dev
+        db.Items.RemoveRange(db.Items);
+        db.Users.RemoveRange(db.Users);
+        db.SaveChanges();
+
+        var items = ReadJSON.ReadJson();
+        db.Items.AddRange(items);
+        db.SaveChanges();
+
+        var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
+        await userManager.CreateAsync(testUser, "alii2002");
+
+        var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
+        await userManager.CreateAsync(testUser2, "alii2002");
+    }
+    else
+    {
+        // Seed only if empty in prod
+        if (!db.Items.Any())
+        {
+            var items = ReadJSON.ReadJson();
+            db.Items.AddRange(items);
+            db.SaveChanges();
+        }
+
+        if (!db.Users.Any())
+        {
+            var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
+            await userManager.CreateAsync(testUser, "alii2002");
+
+            var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
+            await userManager.CreateAsync(testUser2, "alii2002");
+        }
+    }
 }
-
-if (db.Users.Any())
-{
-    db.Users.RemoveRange(db.Users);
-    db.SaveChanges();
-}
-
-var items = ReadJSON.ReadJson();
-db.Items.AddRange(items);
-db.SaveChanges();
-
-
-
-//app.MapIdentityApi<UserProfile>();
 
 app.UseCors("AllowFrontEnd");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.UseStaticFiles();
 
 app.MapItemsEndpoints();
-
 app.MapUsersEndpoints();
-
-// Seed test users at startup (for testing only)
-var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserProfile>>();
-if (!db.Users.Any())
-{
-    var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
-    var result = await userManager.CreateAsync(testUser, "alii2002");
-
-    var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
-    var result2 = await userManager.CreateAsync(testUser2, "alii2002");
-    
-}
-
 app.MapBidsEndpoints();
 
 app.Run();
