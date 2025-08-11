@@ -33,9 +33,6 @@ public static class UsersEndpoints
                 CustomUsername = request.CustomUsername
             };
 
-            // CHECK SWAGGER ENDPOINTS TO CONFIRM WITH LOGIN
-            Console.WriteLine($"--------FirstName--------: {user.FirstName}, LastName: {user.LastName}");
-
             var result = await userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)

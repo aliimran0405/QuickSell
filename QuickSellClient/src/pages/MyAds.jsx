@@ -63,13 +63,6 @@ function MyAds() {
     if (loading) {
         return (<p>Loading...</p>)
     }
-    
-
-    function handleLogout() {
-        localStorage.removeItem("token");
-        navigate("/");
-    }
-    
 
     return(
         <>
@@ -81,7 +74,6 @@ function MyAds() {
                     <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
                 ))
                 ) : (<p style={{color: "white"}}>You have no listed items.</p>)}
-                <button onClick={() => handleLogout()}>Logout</button>
             </div>
             <hr className="new-section" />
         </>

@@ -39,14 +39,16 @@ function Filter() {
         'games',
         'inndoor-furniture',
         'outdoor-furniture',
-        'others'
+        'appliances',
+        'clothing',
+        'other'
     ];
 
     return (
         <div className="filter-wrapper">
             <form>
-                
                     <ul>
+                    <h4 style={{color: "white"}}>Filter Items</h4>
                         {categories.map((cat) => (
                             <li key={cat}>
                                 <label className="cbox">

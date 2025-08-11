@@ -102,9 +102,8 @@ function Register() {
             });
             if (!response.ok) {
                 const error = await response.json();
-                setErrMsg(error.message || "Registration failed");
+                setErrMsg(error.message);
             } else {
-                setSuccess("Account created successfully");
                 navigate("/login", {state: {message: "Account created successfully!"}});
             }
         } catch (err) {
@@ -144,8 +143,8 @@ function Register() {
                 <section className="input-box">
                     <input type="password" name="re-enter-password" placeholder="Re-enter Password" onChange={(e) => setMatchPwd(e.target.value)}/>
                     <i className="bx bxs-lock-alt"></i>
-                    {validMatch && <p className="red-err-msg">{validMatch}</p>}
                 </section>
+                {validMatch && <p className="red-err-msg">{validMatch}</p>}
                 <section className="input-box">
                     <input type="text" name="first-name" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
                     <i className="bx bxs-user-pin"></i>
@@ -157,6 +156,7 @@ function Register() {
                 </section>
                 {validLastName && <p className="red-err-msg">{validLastName}</p>}
 
+                {errMsg && <p className="red-err-msg">{errMsg}</p>}
                 <button className="login-button" type="submit">Register</button>
 
                 

@@ -258,6 +258,8 @@ function CreateItem() {
                             <option value="games">Games</option>
                             <option value="indoor-furniture">Indoor Furniture</option>
                             <option value="outdoor-furniture">Outdoor Furniture</option>
+                            <option value="appliances">Appliances</option>
+                            <option value="clothing">Clothing</option>
                             <option value="others">Others</option>
                         </select>
                         {categoryError && <p style={{color: "red"}}>{categoryError}</p>}

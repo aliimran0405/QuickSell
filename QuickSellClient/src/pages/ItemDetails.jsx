@@ -19,26 +19,14 @@ function ItemDetails() {
     const [bidError, setBidError] = useState("");
     
     const navigate = useNavigate();
-    
-   
-    
-
-    
-
-    // useEffect(() => {
-    //     axios.get(`http://localhost:5000/general-items/${itemId}`)
-    //         .then(response => {
-    //             setItem(response.data);
-    //         });
-    // }, []);
 
 
     useEffect(() => {
         const fetchItemDetails = async () => {
             try {
                 const [itemsResponse, bidsResponse] = await Promise.all([
-                    axios.get(`${API_BASE_URL}/general-items/${itemId}`),
-                    axios.get(`${API_BASE_URL}/bids/item/${itemId}`)
+                    axios.get(`${API_BASE_URL}/general-items/${itemId}`), // Get the item
+                    axios.get(`${API_BASE_URL}/bids/item/${itemId}`) // Get the bid info for the item
                 ]);
                 setItem(itemsResponse.data);
                 setBids(bidsResponse.data);
@@ -59,30 +47,15 @@ function ItemDetails() {
     }, []);
 
     
-
-    
-
-    
-
-    
-    //let imagesArr = [];
-    //let isOwner = false;
     let isLoggedIn = false; // For testing only
 
-    
-    
-    // const combineImages = () => {
-    //     imagesArr.push(item.thumbnail);
-    //     item.mainImages.map(img => 
-    //         imagesArr.push(img)
-    //     );
-    // }
 
     const imagesArr = [
         ...(item.thumbnail ? [item.thumbnail] : []),
         ...(Array.isArray(item.mainImages) ? item.mainImages : [])
     ];
 
+    // Handles the request when the user submits a bid
     const handleSubmittedBid = async () => {
 
         try {
@@ -102,7 +75,11 @@ function ItemDetails() {
             if (error.response) {
                 switch(error.response.status) {
                     case 409:
-                        setBidError("You have already posted a bid for this item");
+                        setBidError("You have already posted a bid for this item.");
+                    case 401:
+                        setBidError("You need to be logged in to place a bid. Please log in.");
+                    case 400:
+                        setBidError("Something went wrong. Please try again.")
                 }
             }
         }

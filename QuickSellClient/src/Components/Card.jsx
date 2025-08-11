@@ -9,8 +9,6 @@ function Card(props) {
                 <h1 id="card-title">{props.name}</h1>
                 <p id="card-price">{props.listedPrice},-</p>
                 <p id="card-area">{props.postCode}, {props.area}</p>
-                <p id="card-username">ILoveTrondheim</p>
-                <p id="card-rating">5 star rating</p>
             </div>
         </Link>
         

@@ -99,6 +99,7 @@ body {
 }
 
 .filter-wrapper {
+  position: sticky;
   background-color: hsl(0, 0%, 10%);
   width: 18%;
   height: 100vh;
@@ -119,7 +120,7 @@ body {
 .card-wrapper {
   display: grid;
   grid-template-columns: 200px 1fr;
-  grid-template-rows: 88px;
+  grid-template-rows: 1fr;
   background-color: hsl(0, 0%, 10%);
   border: 1px solid hsl(0, 0%, 25%);
   border-radius: 20px;
@@ -129,6 +130,7 @@ body {
   height: 250px;
   margin-top: 20px;
   margin-left: 30px;
+  align-items: center;
 }
 
 .card-wrapper p, h1 {
@@ -136,31 +138,39 @@ body {
 }
 
 .card-wrapper img {
-  grid-row: 1 / 2;
+  grid-row: 1 / 4;
   width: 150px;
-  height: 160px;
+  max-height: 150px;
   object-fit: contain;
+  align-self: center;
+  justify-self: center;
 }
 
 #card-title {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1 / 4;
   font-size: 1.5rem;
 }
 
 #card-price {
   grid-column: 3;
-  grid-row: 2;
+  grid-row: 1 / 4;
+  font-size: 1.3em;
 }
 
 #card-area {
   grid-column: 2;
-  grid-row: 4;
+  grid-row: 3;
 }
 
 #card-rating {
   grid-column: 3;
-  grid-row: 4;
+  grid-row: 3;
+}
+
+#card-username {
+  grid-column: 3;
+  grid-row: 2;
 }
 
 .carousel-container {
@@ -617,6 +627,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#my-ads-header {
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
 }
 
 .my-page-container {
@@ -1106,4 +1122,16 @@ body {
   max-width: 135px;
   height: 4.6vh;
   font-size: .9em;
+}
+
+.logout-btn-container {
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+
+.logout-btn-container button {
+  width: 160px;
+  height: 3.6vh;
 }

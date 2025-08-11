@@ -31,6 +31,11 @@ function MyPage() {
         getUser();
     }, [loading]);
 
+    function handleLogout() {
+        localStorage.removeItem("token");
+        navigate("/");
+    }
+
     if (loading) {
         return (<p>Loading...</p>)
     }
@@ -69,6 +74,9 @@ function MyPage() {
                 </Link>
             </div>
             <hr className="new-section" />
+            <div className="logout-btn-container">
+                <button onClick={() => handleLogout()}>Logout</button>
+            </div>
         </>
     );
 }

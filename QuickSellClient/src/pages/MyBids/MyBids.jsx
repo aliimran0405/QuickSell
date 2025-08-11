@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import "./MyBids.css";
 import axios from "axios";
 import API_BASE_URL from "../../../api";
+import { useNavigate } from "react-router-dom";
 
 function MyBids() {
 
     const [myBids, setMyBids] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const navigate = useNavigate();
+
+    // Enums for bid status
     const BID_STATUS_STRING = {
         0: "Pending",
         1: "Accepted",
@@ -37,7 +41,7 @@ function MyBids() {
         fetchAllBids();
     }, [loading]);
 
-
+    // Sends a delete request to delete the specific bid altogether
     const handleDeleteBid = async (bidId) => {
         try {
             const token = localStorage.getItem("token");
@@ -51,13 +55,13 @@ function MyBids() {
             if (error.response) {
                 switch(error.response.status) {
                     case 401:
-                        console.log("401 error");
+                        navigate("/login");
                         break;
                     case 404:
-                        console.log("404 error");
+                        navigate("/my-page/my-bids");
                         break;
                     case 403:
-                        console.log("403 error");
+                        navigate("/forbidden");
                         break
                     default:
                         console.log(error);
@@ -84,7 +88,15 @@ function MyBids() {
                         <p>Status: {BID_STATUS_STRING[bid.bid.bidStatus]}</p>
 
                         <button onClick={() => handleDeleteBid(bid.bid.bidId)}>Delete Bid</button>
-                        {bid && bid.bid.bidStatus === 1 ? (<p>Owner Email: {bid.ownerEmail}</p>) : (<p>None</p>)}
+                        {bid && bid.bid.bidStatus === 1 ? (
+                            <div className="item-owner-details">
+                                <h6>You have won the bid!</h6>
+                                <h6>The details of the owner of the item has shared their details with you</h6>
+                                <p>Owner Email: {bid.ownerEmail}</p>
+                            </div>
+                            ) : (
+                            <p hidden>None</p>
+                        )}
                     </div>
                 ))
                 :
