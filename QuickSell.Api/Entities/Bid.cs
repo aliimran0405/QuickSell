@@ -18,5 +18,5 @@ public class Bid
 
     //public bool WinningBid { get; set; } = false;
 
-    public int BidStatus { get; set; } = 0; // -1 = declined, 0 = pending, 1 = accepted
+    public int BidStatus { get; set; } = 0; // 2 = declined, 0 = pending, 1 = accepted
 }

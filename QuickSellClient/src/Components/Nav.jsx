@@ -1,4 +1,6 @@
-
+import plusIcon from "../assets/icons/plus_icon.png";
+import profileIcon from "../assets/icons/profile_icon.png"
+import homeIcon from "../assets/icons/home_icon.png"
 function Nav() {
     return(
         <div className="nav-container">
@@ -6,19 +8,19 @@ function Nav() {
                 <ul className="nav-links">
                     <li>
                         <a href="/general-items/new" className="nav-icon-link">
-                            <img src="plus_icon.png" alt="new_ad_icon" className="nav-icon"/>
+                            <img src={plusIcon} alt="new_ad_icon" className="nav-icon"/>
                             New Ad
                         </a>
                     </li>
                     <li>
                         <a href="/login" className="nav-icon-link">
-                        <img src="profile_icon.png" alt="login_icon" className="nav-icon" id="login-icon"/>
+                        <img src={profileIcon} alt="login_icon" className="nav-icon" id="login-icon"/>
                         Login
                         </a>
                     </li>
                     <li>
                         <a href="/my-page" className="nav-icon-link">
-                            <img src="home_icon.png" alt="home_icon" className="nav-icon" id="my-page-icon"/>
+                            <img src={homeIcon} alt="home_icon" className="nav-icon" id="my-page-icon"/>
                             My Page
                         </a>
                     </li>

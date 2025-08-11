@@ -68,7 +68,7 @@ function MyItemDetails() {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.post(`${API_BASE_URL}/bids/change-status/${bidId}`, {
-                newStatus: -1
+                newStatus: 2
             },
             {
                 headers: {

@@ -8,6 +8,12 @@ function MyBids() {
     const [myBids, setMyBids] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const BID_STATUS_STRING = {
+        0: "Pending",
+        1: "Accepted",
+        2: "Rejected"
+    };
+
     useEffect(() => {
         const fetchAllBids = async () => {
             try {
@@ -40,6 +46,7 @@ function MyBids() {
                     "Authorization": `Bearer ${token}`
                 }
             });
+            setMyBids(prevBids => prevBids.filter(bid => bid.bid.bidId !== bidId));
         } catch (error) {
             if (error.response) {
                 switch(error.response.status) {
@@ -72,11 +79,11 @@ function MyBids() {
 
                     <div className="bids">
                         <hr />
-                        <h4>{bid.item.name}</h4>
-                        <p>{bid.bid.bidAmount},-</p>
-                        <p>Status: {bid.bid.bidStatus}</p>
+                        <h4>Name of ad: {bid.item.name}</h4>
+                        <p>Your bid amount: {bid.bid.bidAmount},-</p>
+                        <p>Status: {BID_STATUS_STRING[bid.bid.bidStatus]}</p>
 
-                        <button onClick={() => handleDeleteBid(bid.bidId)}>Delete Bid</button>
+                        <button onClick={() => handleDeleteBid(bid.bid.bidId)}>Delete Bid</button>
                         {bid && bid.bid.bidStatus === 1 ? (<p>Owner Email: {bid.ownerEmail}</p>) : (<p>None</p>)}
                     </div>
                 ))

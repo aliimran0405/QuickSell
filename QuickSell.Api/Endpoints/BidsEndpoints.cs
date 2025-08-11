@@ -144,7 +144,12 @@ public static class BidsEndpoints
                     OwnerEmail = b.BidStatus == 1 ? new { u.Email } : null
                 }).ToListAsync();
 
+            Console.WriteLine($"========================: COUNT: {myBids.Count}");
+            foreach (var b in myBids)
+            {
 
+                Console.WriteLine($"MYBIDS--------------: {b.Bid.BidAmount} {b.Bid.BidStatus}");
+            }
             return Results.Ok(myBids);
         }).RequireAuthorization();
 
@@ -156,7 +161,7 @@ public static class BidsEndpoints
                 return Results.Unauthorized();
             }
 
-            if (request.NewStatus != 1 && request.NewStatus != -1)
+            if (request.NewStatus != 1 && request.NewStatus != 2)
             {
                 return Results.BadRequest();
             }

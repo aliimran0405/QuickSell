@@ -32,15 +32,15 @@ public class QuickSellContext : IdentityDbContext<UserProfile>
 
         builder.Entity<Bid>()
             .HasOne(b => b.Item)
-            .WithMany() // or .WithMany(i => i.Bids) if you add List<Bid> in Item
+            .WithMany() 
             .HasForeignKey(b => b.ItemId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Bid>()
             .HasOne(b => b.User)
-            .WithMany() // or .WithMany(u => u.Bids) if you add List<Bid> in UserProfile
+            .WithMany() 
             .HasForeignKey(b => b.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
 
     }

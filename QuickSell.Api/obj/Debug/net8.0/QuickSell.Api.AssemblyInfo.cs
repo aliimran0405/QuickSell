@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuickSell.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58e423c27c2832e87ce6504dfc7170821a98a92d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf1c9c9ddf348a95dcc3623546370b728ce6c8fc")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuickSell.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuickSell.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

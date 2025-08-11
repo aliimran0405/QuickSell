@@ -1097,3 +1097,13 @@ body {
   color: white;
   font-size: larger;
 }
+
+#bid-amount {
+  border: 1px solid hsl(0, 0%, 35%);
+  border-radius: 2px;
+  background-color: hsl(0, 0%, 20%);
+  color: hsl(0, 0%, 100%);
+  max-width: 135px;
+  height: 4.6vh;
+  font-size: .9em;
+}

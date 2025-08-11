@@ -16,6 +16,7 @@ function ItemDetails() {
     const [itemNotFound, setItemNotFound] = useState(false);
 
     const [bidAmount, setBidAmount] = useState(0);
+    const [bidError, setBidError] = useState("");
     
     const navigate = useNavigate();
     
@@ -95,8 +96,15 @@ function ItemDetails() {
                     "Authorization": `Bearer ${token}`,
                 }
             });
+            const bidsResponse = await axios.get(`${API_BASE_URL}/bids/item/${itemId}`);
+            setBids(bidsResponse.data);
         } catch (error) {
-            console.log("Bid post error");
+            if (error.response) {
+                switch(error.response.status) {
+                    case 409:
+                        setBidError("You have already posted a bid for this item");
+                }
+            }
         }
     }
 
@@ -118,17 +126,17 @@ function ItemDetails() {
                     <p>{item.usedStatus}</p>
                 </div>
                 <div className="all-bids">
-                    {console.log(bids)}
                     <h3>Current Bids</h3>
                     {bids && bids.length > 0 ? bids.map(b => (
-                        <div className="bid-row">
+                        <div className="bid-row" key={`${b.user.customUsername}-${b.bidAmount}`}>
                             <p>{b.user.customUsername}</p>
                             <p>{b.bidAmount},-</p>
                         </div>
                     )) : <p>No bids are currently posted for this item</p>}
                 </div>
-                <div>
+                <div className="input-field">
                     <label htmlFor="bid-amount">Enter bid amount</label>
+                    {bidError && <p className="red-err-msg">{bidError}</p>}
                     <input type="number" id="bid-amount" onChange={(e) => setBidAmount(e.target.value)}/>
                 </div>
                 <button className="bid-button" onClick={() => handleSubmittedBid()}>
@@ -145,7 +153,7 @@ function ItemDetails() {
                     :
                     <div className="not-logged-in">
                         <img src="/default_profile_img.png" alt="default-img" />
-                        <p>You need to be logged in to see username and area</p>
+                        <p>You need to be logged in to see username of seller</p>
                     </div>
                 }
             </div>
