@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../api";
 
 // Works like a hook basically
 function useCheckAuth(path) {
@@ -15,7 +16,7 @@ function useCheckAuth(path) {
                     navigate("/login");
                     return;
                 }
-                const response = await axios.get(`http://localhost:5000/${path}`, {
+                const response = await axios.get(`${API_BASE_URL}/${path}`, {
                     headers: {
                         "Authorization": `Bearer ${token}`
                     }
