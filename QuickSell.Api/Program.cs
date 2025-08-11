@@ -4,7 +4,6 @@ using QuickSell.Api.Data;
 using QuickSell.Api.Endpoints;
 using QuickSell.Api.Entities;
 using QuickSell.Api.Utils;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -18,8 +17,13 @@ var jwtKey = builder.Configuration["Jwt:Key"] ?? "TestSecretKey12345678!!!MoreBy
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 var issuer = builder.Configuration["Jwt:Issuer"] ?? "QuickSellAPI";
 
-// Db setup
+// Db setup - increase connection timeout
 var connString = builder.Configuration.GetConnectionString("QuickSell");
+if (!connString.Contains("Connection Timeout", StringComparison.OrdinalIgnoreCase))
+{
+    connString += connString.EndsWith(";") ? "" : ";";
+    connString += "Connection Timeout=60;"; // increase timeout to 60s
+}
 builder.Services.AddSqlServer<QuickSellContext>(connString);
 
 builder.Services.AddAuthorization();
@@ -47,10 +51,8 @@ builder.Services.AddIdentityCore<UserProfile>(options =>
     options.Lockout.AllowedForNewUsers = false;
     options.Lockout.MaxFailedAccessAttempts = int.MaxValue;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.Zero;
-
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
-
     options.Password.RequireDigit = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireNonAlphanumeric = false;
@@ -91,51 +93,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<QuickSellContext>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserProfile>>();
-
-    if (app.Environment.IsDevelopment())
-    {
-        // Always clear & reseed in dev
-        db.Items.RemoveRange(db.Items);
-        db.Users.RemoveRange(db.Users);
-        db.SaveChanges();
-
-        var items = ReadJSON.ReadJson();
-        db.Items.AddRange(items);
-        db.SaveChanges();
-
-        var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
-        await userManager.CreateAsync(testUser, "alii2002");
-
-        var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
-        await userManager.CreateAsync(testUser2, "alii2002");
-    }
-    else
-    {
-        // Seed only if empty in prod
-        if (!db.Items.Any())
-        {
-            var items = ReadJSON.ReadJson();
-            db.Items.AddRange(items);
-            db.SaveChanges();
-        }
-
-        if (!db.Users.Any())
-        {
-            var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
-            await userManager.CreateAsync(testUser, "alii2002");
-
-            var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
-            await userManager.CreateAsync(testUser2, "alii2002");
-        }
-    }
-}
-
 app.UseCors("AllowFrontEnd");
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
@@ -143,5 +101,70 @@ app.UseStaticFiles();
 app.MapItemsEndpoints();
 app.MapUsersEndpoints();
 app.MapBidsEndpoints();
+
+// ---- Move DB seeding to ApplicationStarted with retry logic ----
+app.Lifetime.ApplicationStarted.Register(async () =>
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<QuickSellContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserProfile>>();
+
+    var retries = 5;
+    var delay = TimeSpan.FromSeconds(5);
+
+    for (var attempt = 1; attempt <= retries; attempt++)
+    {
+        try
+        {
+            Console.WriteLine($"[DB INIT] Attempt {attempt} to connect and seed database...");
+            await db.Database.EnsureCreatedAsync();
+
+            if (app.Environment.IsDevelopment())
+            {
+                db.Items.RemoveRange(db.Items);
+                db.Users.RemoveRange(db.Users);
+                await db.SaveChangesAsync();
+
+                var items = ReadJSON.ReadJson();
+                db.Items.AddRange(items);
+                await db.SaveChangesAsync();
+
+                var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
+                await userManager.CreateAsync(testUser, "alii2002");
+
+                var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
+                await userManager.CreateAsync(testUser2, "alii2002");
+            }
+            else
+            {
+                if (!db.Items.Any())
+                {
+                    var items = ReadJSON.ReadJson();
+                    db.Items.AddRange(items);
+                    await db.SaveChangesAsync();
+                }
+
+                if (!db.Users.Any())
+                {
+                    var testUser = new UserProfile { UserName = "testuser1@gmail.com", Email = "testuser1@gmail.com", FirstName = "user1", LastName = "user1", CustomUsername = "testuser1" };
+                    await userManager.CreateAsync(testUser, "alii2002");
+
+                    var testUser2 = new UserProfile { UserName = "testuser2@gmail.com", Email = "testuser2@gmail.com", FirstName = "user2", LastName = "user2", CustomUsername = "testuser2" };
+                    await userManager.CreateAsync(testUser2, "alii2002");
+                }
+            }
+
+            Console.WriteLine("[DB INIT] Database seeding complete.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[DB INIT] Attempt {attempt} failed: {ex.Message}");
+            if (attempt == retries) throw;
+            await Task.Delay(delay);
+            delay = delay * 2; // exponential backoff
+        }
+    }
+});
 
 app.Run();
