@@ -31,42 +31,68 @@ function Register() {
     const [matchFocus, setMatchFocus] = useState(false);
 
     const [firstName, setFirstName] = useState("");
+    const [validFirstName, setValidFirstName] = useState("");
+
     const [lastName, setLastName] = useState("");
+    const [validLastName, setValidLastName] = useState("");
 
     const [errMsg, setErrMsg] = useState("");
     const [success, setSuccess] = useState(false);
+
+    const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = "Register";
     })
-
-    useEffect(() => {
-        const result = USER_REGEX.test(user);
-        console.log(user);
-        console.log(result);
-        setValidName(result);
-    }, [user]);
-
-    useEffect(() => {
-        const result = PWD_REGEX.test(pwd);
-        setValidPwd(result);
-        const match = pwd === matchPwd;
-        setValidMatch(match);
-    }, [pwd, matchPwd]);
+    
 
     useEffect(() => {
         setErrMsg(""); // Set to nothing as error is false when user re-types something
-    }, [user, pwd, matchPwd]);
+    }, [user, pwd, matchPwd, firstName, lastName]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (pwd != matchPwd) {
-            setErrMsg("Passwords do not match");
-            return;
+        let valid = true;
+
+        if (!USER_REGEX.test(user)) {
+            setValidName("Choose another username please");
+            valid = false;
+        } else {
+            setValidName("");
         }
+
+        if (!PWD_REGEX.test(pwd)) {
+            setValidPwd("Please choose a stronger password");
+            valid = false
+        } else {
+            setValidPwd("");
+        }
+
+        if (pwd != matchPwd) {
+            setValidMatch("Passwords do not match");
+            valid = false;
+        } else {
+            setValidMatch("");
+        }
+
+        if (firstName.trim().length > 20) {
+            setValidFirstName("First Name is too long");
+            valid = false;
+        } else {
+            setValidFirstName("");
+        }
+
+        if (lastName.trim().length > 20) {
+            setValidLastName("Last Name is too long");
+            valid = false;
+        } else {
+            setValidLastName("");
+        }
+
+        if (!valid) return;
 
         try {
             const response = await fetch(`${API_BASE_URL}/register`, {
@@ -79,11 +105,11 @@ function Register() {
                 setErrMsg(error.message || "Registration failed");
             } else {
                 setSuccess("Account created successfully");
-                navigate("/login");
+                navigate("/login", {state: {message: "Account created successfully!"}});
             }
         } catch (err) {
             setErrMsg("Server error");
-        }
+        } 
     };
 
     return(
@@ -104,27 +130,32 @@ function Register() {
                     <input type="text" name="username" placeholder="Username" onChange={(e) => setUser(e.target.value)}/>
                     <i className="bx bxs-user"></i>
                 </section>
+                {validName && <p className="red-err-msg">{validName}</p>}
                 <section className="input-box">
                     <input type="text" name="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-                    <i class='bx bxs-envelope'  ></i> 
+                    <i className='bx bxs-envelope'  ></i> 
                 </section>
+                {validEmail && <p className="red-err-msg">{validEmail}</p>}
                 <section className="input-box">
                     <input type="password" name="password" placeholder="Password" onChange={(e) => setPwd(e.target.value)}/>
                     <i className="bx bxs-lock-alt"></i>
                 </section>
+                {validPwd && <p className="red-err-msg">{validPwd}</p>}
                 <section className="input-box">
                     <input type="password" name="re-enter-password" placeholder="Re-enter Password" onChange={(e) => setMatchPwd(e.target.value)}/>
                     <i className="bx bxs-lock-alt"></i>
-                    {errMsg && <p style={{color: "red"}}>{errMsg}</p>}
+                    {validMatch && <p className="red-err-msg">{validMatch}</p>}
                 </section>
                 <section className="input-box">
                     <input type="text" name="first-name" placeholder="First Name" onChange={(e) => setFirstName(e.target.value)}/>
                     <i className="bx bxs-user-pin"></i>
                 </section>
+                {validFirstName && <p className="red-err-msg">{validFirstName}</p>}
                 <section className="input-box">
                     <input type="text" name="last-name" placeholder="Last Name" onChange={(e) => setLastName(e.target.value)}/>
                     <i className="bx bxs-user-pin"></i>
                 </section>
+                {validLastName && <p className="red-err-msg">{validLastName}</p>}
 
                 <button className="login-button" type="submit">Register</button>
 

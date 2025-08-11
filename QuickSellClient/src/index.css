@@ -1085,3 +1085,15 @@ body {
   align-items: center; 
 }
 
+.red-err-msg {
+  color: red;
+}
+
+.reg-success-msg {
+  color: #28d17c;
+}
+
+.loading-text {
+  color: white;
+  font-size: larger;
+}

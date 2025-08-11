@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import 'boxicons/css/boxicons.min.css';
 import Aurora from "../Components/Aurora";
@@ -9,7 +9,10 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [pwd, setPwd] = useState("");
-    const [test, setTest] = useState(null);
+    const [errMsg, setErrMsg] = useState("");
+
+    const location = useLocation();
+    const regSuccessMsg = location.state?.message;
 
     const navigate = useNavigate();
 
@@ -27,11 +30,10 @@ function Login() {
                     password: pwd
                 },
             );
-            setTest(response.data);
             localStorage.setItem("token", response.data.token);
             navigate("/my-page");
         } catch (error) {
-            console.error("Something failed", error);
+            setErrMsg("Email or password is incorrect. Please try again.")
         }
     }
     
@@ -57,8 +59,9 @@ function Login() {
                     <input type="password" name="password" placeholder="Password" onChange={(e) => setPwd(e.target.value)}/>
                     <i className="bx bxs-lock-alt"></i>
                 </section>
-
-                <section className="remember-forgot-box">
+                {regSuccessMsg && <p className="reg-success-msg">{regSuccessMsg}</p>}
+                {errMsg && <p className="red-err-msg">{errMsg}</p>}
+                {/*<section className="remember-forgot-box">
                     <div className="remember-me">
                         <input type="checkbox" name="remember-me" id="remember-me"/>
                         <label htmlFor="remember-me">
@@ -68,7 +71,7 @@ function Login() {
                     <a href="#" className="forgot-password">
                         <h5>Forgot password?</h5>
                     </a>
-                </section>
+                </section> */}
 
                 <button className="login-button" type="submit">Login</button>
 

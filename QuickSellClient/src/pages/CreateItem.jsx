@@ -217,7 +217,6 @@ function CreateItem() {
 
     return(
         <>
-        {console.log("USERDATA2: ", userData)}
         <h1>Create new ad</h1>
         <form onSubmit={handleCreateItemSubmit}>
             <FileUploader initialPreviewUrls={initialPreviewUrls} setImageFiles={setImageFiles}/>

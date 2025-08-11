@@ -13,36 +13,52 @@ function GeneralItems() {
     const [items, setItems] = useState([]);
     const location = useLocation();
     const [filteredItems, setFilteredItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/general-items`)
-            .then(response => {
+        const fetchItems = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/general-items`);
                 setItems(response.data);
-            });
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 404) {
+                        setItems([]);
+                    }
+                }
+            } finally {
+                setLoading(false);
+            }
+
+        }
+        fetchItems();
+            
     }, []);
 
 
     useEffect(() => {
+        if (loading) return;
         document.title = "General Items";
         const params = new URLSearchParams(location.search);
-        console.log("PARAMS: ", params);
+        
         const category = params.getAll('category');
-        console.log("CATEGORY: ", category);
-
-        if (category.length != 0) {
-            setFilteredItems(items.filter(item => category.includes(item.category)));
-        }
-        else {
-            setFilteredItems(items);
-        }
+        
 
         
-    }, [location.search, items])
+            if (category.length != 0) {
+                setFilteredItems(items.filter(item => category.includes(item.category)));
+            }
+            else {
+                setFilteredItems(items);
+            }
+        
 
+        
+    }, [location.search, items, loading])
 
+    
     return(
         <>
-            {console.log("LOCATION: ", location)}
             <div className="content-container">
                 <Filter />
                 <div className="card-container">
@@ -50,7 +66,7 @@ function GeneralItems() {
                         <p className="no-items-text">No listed items for this category</p>
                     ) : (
                         filteredItems.map(item => (
-                            <Card linkTo={"/general-items"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
+                            <Card key={item.itemId} linkTo={"/general-items"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
                     )))}
                 </div>
             </div>
