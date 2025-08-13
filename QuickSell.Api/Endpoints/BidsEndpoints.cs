@@ -29,6 +29,12 @@ public static class BidsEndpoints
                 return Results.NotFound("Item not found");
             }
 
+            // Make sure owner can not place a bid on their own item
+            if (item.OwnerId == userId)
+            {
+                return Results.Conflict("You cannot place a bid for your own item.");
+            }
+
             // Make sure bid amount is larger than listed price
             if (request.BidAmount < item.ListedPrice)
             {

@@ -125,9 +125,6 @@ app.Lifetime.ApplicationStarted.Register(async () =>
                 db.Users.RemoveRange(db.Users);
                 await db.SaveChangesAsync();
 
-                var items = ReadJSON.ReadJson();
-                db.Items.AddRange(items);
-                await db.SaveChangesAsync();
 
                 var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
                 await userManager.CreateAsync(testUser, "alii2002");

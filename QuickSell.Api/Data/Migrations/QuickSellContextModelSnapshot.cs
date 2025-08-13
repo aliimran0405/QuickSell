@@ -224,7 +224,7 @@ namespace QuickSell.Api.Data.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
@@ -242,6 +242,8 @@ namespace QuickSell.Api.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ItemId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Items");
                 });
@@ -390,6 +392,22 @@ namespace QuickSell.Api.Data.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuickSell.Api.Entities.Item", b =>
+                {
+                    b.HasOne("QuickSell.Api.Entities.UserProfile", "Owner")
+                        .WithMany("ItemsOwned")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("QuickSell.Api.Entities.UserProfile", b =>
+                {
+                    b.Navigation("ItemsOwned");
                 });
 #pragma warning restore 612, 618
         }

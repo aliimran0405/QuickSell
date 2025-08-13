@@ -1,5 +1,9 @@
 namespace QuickSell.Api.Dtos;
 
+public record class OwnerDto(
+    string OwnerUsername
+);
+
 public record class ItemDetailsDto(
     int ItemId,
     string Name,
@@ -12,6 +16,7 @@ public record class ItemDetailsDto(
     string PostCode,
     string Area,
     string OwnerId,
+    OwnerDto Owner,
     string CreatedAt,
     string UpdatedAt
 );

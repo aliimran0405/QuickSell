@@ -40,21 +40,11 @@ public static class ItemsEndpoints
 
             return Results.Ok(ItemDtos);
 
-            // var ItemDtos = ItemEntities.Select(i => new ItemDto(
-            //     i.ItemId,
-            //     i.Name,
-            //     i.ListedPrice,
-            //     i.Category,
-            //     i.Thumbnail
-            // )).ToArray();
-
-            // return ItemDtos is null ? Results.NotFound() : Results.Ok(ItemDtos);
-            // //return Results.Ok(ItemDtos);
         });
 
         group.MapGet("/{id}", async (int id, QuickSellContext dbContext) =>
         {
-            var item = await dbContext.Items.FindAsync(id);
+            var item = await dbContext.Items.Include(i => i.Owner).FirstOrDefaultAsync(i => i.ItemId == id);
 
             if (item is null)
             {
@@ -73,6 +63,7 @@ public static class ItemsEndpoints
                 item.PostCode,
                 item.Area,
                 item.OwnerId,
+                new OwnerDto(item.Owner.CustomUsername),
                 item.CreatedAt.ToShortDateString(),
                 item.UpdatedAt.ToShortDateString()
             );
@@ -105,6 +96,7 @@ public static class ItemsEndpoints
 
         group.MapPost("/new", async (HttpRequest request, QuickSellContext dbContext) =>
         {
+            
             var form = await request.ReadFormAsync();
 
             var name = form["name"].ToString();

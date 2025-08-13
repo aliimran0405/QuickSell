@@ -17,6 +17,10 @@ function ItemDetails() {
 
     const [bidAmount, setBidAmount] = useState(0);
     const [bidError, setBidError] = useState("");
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const [loading, setLoading] = useState(true);
     
     const navigate = useNavigate();
 
@@ -34,20 +38,31 @@ function ItemDetails() {
                 if (error.response) {
                     if (error.response.status === 404) {
                         setItemNotFound(true);
-                    }
+                    } 
                 }
+            } finally {
+                setLoading(false);
             }
         }
         fetchItemDetails();
-    }, []);
+    }, [loading]);
 
     
     useEffect(() => {
         document.title = item.name;
     }, []);
 
-    
-    let isLoggedIn = false; // For testing only
+     
+    useEffect(() => {
+        try {
+            const token = localStorage.getItem("token");
+            if (token) {
+                setIsLoggedIn(true);
+            }
+        } catch (err) {
+            setIsLoggedIn(false);
+        }
+    }, [isLoggedIn]);
 
 
     const imagesArr = [
@@ -75,19 +90,26 @@ function ItemDetails() {
             if (error.response) {
                 switch(error.response.status) {
                     case 409:
-                        setBidError("You have already posted a bid for this item.");
+                        setBidError(error.response.data);
+                        break;
                     case 401:
                         setBidError("You need to be logged in to place a bid. Please log in.");
+                        break;
                     case 400:
                         setBidError("Something went wrong. Please try again.")
+                        break;
+                    default:
+                        setBidError(error);
                 }
             }
         }
     }
 
+    if (loading) return (<p className="loading-text">Loading...</p>);
     
     return(
         <>
+            {console.log(item)}
             <div className="custom-carousel-container">
                 <CarouselComponent mainImages={imagesArr}/>
             </div>
@@ -95,7 +117,6 @@ function ItemDetails() {
             <div className="info-container" style={{color: "white"}}>
                 <div className="info-header-row">
                     <h1>{item.name}</h1>
-                    <p>Name of user of seller</p>
                 </div>
                 <h3>{item.listedPrice},-</h3>
                 <p>{item.description}</p>
@@ -113,8 +134,8 @@ function ItemDetails() {
                 </div>
                 <div className="input-field">
                     <label htmlFor="bid-amount">Enter bid amount</label>
-                    {bidError && <p className="red-err-msg">{bidError}</p>}
                     <input type="number" id="bid-amount" onChange={(e) => setBidAmount(e.target.value)}/>
+                    {bidError && <p className="red-err-msg">{bidError}</p>}
                 </div>
                 <button className="bid-button" onClick={() => handleSubmittedBid()}>
                     <span>Place Bid</span>
@@ -124,8 +145,7 @@ function ItemDetails() {
             <div className="sens-info">
                 {isLoggedIn ?
                     <div className="logged-in">
-                        <p>Username</p> 
-                        <p>Area</p>
+                        <p>Username of owner: {item.owner.ownerUsername}</p> 
                     </div>
                     :
                     <div className="not-logged-in">

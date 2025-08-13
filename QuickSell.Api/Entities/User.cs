@@ -13,5 +13,6 @@ public class UserProfile : IdentityUser
 
     public string? CustomUsername { get; set; }
 
-    
+    public virtual ICollection<Item> ItemsOwned { get; set; } = new List<Item>();
+
 }

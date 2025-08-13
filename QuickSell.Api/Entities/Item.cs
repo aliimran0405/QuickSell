@@ -26,7 +26,7 @@ public class Item
     public required string Area { get; set; }
 
     public required string OwnerId { get; set; }
-    
+    public virtual UserProfile Owner { get; set; } = null!;
 
     public required DateTime CreatedAt { get; set; }
 

@@ -12,7 +12,7 @@ using QuickSell.Api.Data;
 namespace QuickSell.Api.Data.Migrations
 {
     [DbContext(typeof(QuickSellContext))]
-    [Migration("20250810224342_InitialCreate")]
+    [Migration("20250813180016_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -227,7 +227,7 @@ namespace QuickSell.Api.Data.Migrations
 
                     b.Property<string>("OwnerId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
@@ -245,6 +245,8 @@ namespace QuickSell.Api.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ItemId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Items");
                 });
@@ -387,12 +389,28 @@ namespace QuickSell.Api.Data.Migrations
                     b.HasOne("QuickSell.Api.Entities.UserProfile", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Item");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("QuickSell.Api.Entities.Item", b =>
+                {
+                    b.HasOne("QuickSell.Api.Entities.UserProfile", "Owner")
+                        .WithMany("ItemsOwned")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("QuickSell.Api.Entities.UserProfile", b =>
+                {
+                    b.Navigation("ItemsOwned");
                 });
 #pragma warning restore 612, 618
         }
