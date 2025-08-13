@@ -71,9 +71,9 @@ function MyAds() {
             <div className="my-page-container">
                 <h2 style={{color: "white"}}>My Ads</h2>
                 {userItems.length != 0 ? (userItems.map(item => (
-                    <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} postCode={item.postCode} area={item.area}/>
+                    <Card linkTo={"/general-items/my-ads"} id={item.itemId} thumbnail={`${API_BASE_URL}/${item.thumbnail}`} name={item.name} listedPrice={item.listedPrice} area={item.area}/>
                 ))
-                ) : (<p style={{color: "white"}}>You have no listed items.</p>)}
+                ) : (<p style={{color: "white"}}>You have no ads listed.</p>)}
             </div>
             <hr className="new-section" />
         </>

@@ -81,7 +81,7 @@ function MyBids() {
                 <h2>Manage bids</h2>
                 {myBids && myBids.length > 0 ? myBids.map(bid => (
 
-                    <div className="bids">
+                    <div key={bid.bid.bidId} className="bids">
                         <hr />
                         <h4>Name of ad: {bid.item.name}</h4>
                         <p>Your bid amount: {bid.bid.bidAmount},-</p>
@@ -90,9 +90,9 @@ function MyBids() {
                         <button onClick={() => handleDeleteBid(bid.bid.bidId)}>Delete Bid</button>
                         {bid && bid.bid.bidStatus === 1 ? (
                             <div className="item-owner-details">
-                                <h6>You have won the bid!</h6>
-                                <h6>The details of the owner of the item has shared their details with you</h6>
-                                <p>Owner Email: {bid.ownerEmail}</p>
+                                <h4>You have won the bid!</h4>
+                                <p>The owner of the item has shared their details with you</p>
+                                <p>Email: {bid.ownerEmail.email}</p>
                             </div>
                             ) : (
                             <p hidden>None</p>

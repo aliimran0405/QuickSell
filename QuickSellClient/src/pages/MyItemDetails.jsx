@@ -157,6 +157,9 @@ function MyItemDetails() {
                 
                 {receivedBids && receivedBids.length > 0 ? receivedBids.map(bids => (
                     <div className="bid-info-container">
+                        <div className="disclaimer-container">
+                            <p>NOTE: By accepting a bid you are agreeing to forward your e-mail address and phone number to the winner of the bid.</p>
+                        </div>
                         <h3 id="active-bids-header">Active bids</h3>
                         <hr />
                         <p>{bids.user.customUsername}</p>
@@ -180,8 +183,8 @@ function MyItemDetails() {
                             : 
                             <span className="active-status" style={{border: "1px solid gray", backgroundColor: "gray"}}>Sold</span>
                         }</p>
-                    <p>Views: 148</p>
-                    <p>Favourites: 13</p>
+                    <p>Views: N/A</p>
+                    <p>Favourites: N/A</p>
                 </div>
             </div>
             
