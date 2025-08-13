@@ -126,11 +126,11 @@ app.Lifetime.ApplicationStarted.Register(async () =>
                 await db.SaveChangesAsync();
 
 
-                var testUser = new UserProfile { UserName = "aliimran0405@gmail.com", Email = "aliimran0405@gmail.com", FirstName = "Ali", LastName = "Imran", CustomUsername = "aliimran2002" };
-                await userManager.CreateAsync(testUser, "alii2002");
+                var testUser = new UserProfile { UserName = "testuser1@gmail.com", Email = "testuser1@gmail.com", FirstName = "user1", LastName = "user1", CustomUsername = "testuser1" };
+                await userManager.CreateAsync(testUser, "devuser123!");
 
-                var testUser2 = new UserProfile { UserName = "rambo@gmail.com", Email = "rambo@gmail.com", FirstName = "Rambo", LastName = "Shenk", CustomUsername = "RamboShenk" };
-                await userManager.CreateAsync(testUser2, "alii2002");
+                var testUser2 = new UserProfile { UserName = "testuser2@gmail.com", Email = "testuser2@gmail.com", FirstName = "user2", LastName = "user2", CustomUsername = "testuser2" };
+                await userManager.CreateAsync(testUser2, "devuser123!");
             }
             else
             {
@@ -144,10 +144,10 @@ app.Lifetime.ApplicationStarted.Register(async () =>
                 if (!db.Users.Any())
                 {
                     var testUser = new UserProfile { UserName = "testuser1@gmail.com", Email = "testuser1@gmail.com", FirstName = "user1", LastName = "user1", CustomUsername = "testuser1" };
-                    await userManager.CreateAsync(testUser, "alii2002");
+                    await userManager.CreateAsync(testUser, "devuser123!");
 
                     var testUser2 = new UserProfile { UserName = "testuser2@gmail.com", Email = "testuser2@gmail.com", FirstName = "user2", LastName = "user2", CustomUsername = "testuser2" };
-                    await userManager.CreateAsync(testUser2, "alii2002");
+                    await userManager.CreateAsync(testUser2, "devuser123!");
                 }
             }
 
