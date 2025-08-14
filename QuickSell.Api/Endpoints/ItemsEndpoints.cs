@@ -7,6 +7,8 @@ using QuickSell.Api.Entities;
 using QuickSell.Api.Mappers;
 using System.Security.Claims;
 using QuickSell.Api.Utils;
+using Microsoft.AspNetCore.Builder;
+
 
 namespace QuickSell.Api.Endpoints;
 
@@ -308,7 +310,7 @@ public static class ItemsEndpoints
             
 
             return Results.Ok(result);
-        });
+        }).RequireCors("AllowFrontEnd");
 
 
 
