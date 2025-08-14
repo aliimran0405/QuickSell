@@ -93,6 +93,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+// ---- CORS DEBUG LOGGER ----
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("---- CORS DEBUG ----");
+    Console.WriteLine($"Method: {context.Request.Method}");
+    Console.WriteLine($"Path: {context.Request.Path}");
+    Console.WriteLine($"Origin: {context.Request.Headers["Origin"]}");
+    Console.WriteLine($"Access-Control-Request-Method: {context.Request.Headers["Access-Control-Request-Method"]}");
+    Console.WriteLine("--------------------");
+    await next();
+});
+
 app.UseCors("AllowFrontEnd");
 app.Use(async (context, next) =>
 {
