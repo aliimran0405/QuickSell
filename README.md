@@ -13,3 +13,16 @@ A logged in user get these benefits:
 4. Manage bids that the user has submitted to other items.
 5. Update and manage user credentials.
 
+
+# User info
+
+- Since some of the features require to users, I have provided two test users that you can play around with.
+
+- User 1 credentials:
+E-mail: testuser1@gmail.com
+Password: devuser123!
+
+- User 2 credentials:
+E-mail: testuser2@gmail.com
+Password: devuser123!
+
