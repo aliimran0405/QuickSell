@@ -310,7 +310,7 @@ public static class ItemsEndpoints
             
 
             return Results.Ok(result);
-        }).RequireCors("AllowFrontEnd");
+        });
 
 
 

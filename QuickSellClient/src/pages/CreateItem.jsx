@@ -98,7 +98,7 @@ function CreateItem() {
     
     const handleGetPostalArea = async (postCode) => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/general-items/get-area/${postCode}`);
+            const response = await axios.get(`${API_BASE_URL}/general-items/get-area/${postCode}`, {withCredentials: 'true'});
             const tempAreaStr = response.data.toLowerCase();
             const capitalized = Capitalize(tempAreaStr)
             setArea(capitalized);
