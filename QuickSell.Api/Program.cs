@@ -119,11 +119,12 @@ app.Use(async (context, next) =>
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseStaticFiles();
 
 app.MapItemsEndpoints();
 app.MapUsersEndpoints();
 app.MapBidsEndpoints();
+
+app.UseStaticFiles();
 
 // ---- Move DB seeding to ApplicationStarted with retry logic ----
 app.Lifetime.ApplicationStarted.Register(async () =>
