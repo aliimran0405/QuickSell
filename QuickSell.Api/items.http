@@ -1,4 +1,4 @@
-GET http://localhost:5000/general-items
+GET http://localhost:5050/general-items
 
 ###
 GET http://localhost:5000/general-items?category=Electronics
@@ -37,3 +37,6 @@ Content-Type: multipart/form-data
     "PostCode": "0645",
     "Area": "Oslo"
 }
+
+###
+GET http://localhost:5050/general-items/get-area/2013

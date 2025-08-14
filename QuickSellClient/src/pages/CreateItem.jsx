@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import useCheckAuth from "../Utils/useCheckAuth";
 import API_BASE_URL from "../../api";
+import Capitalize from "../Utils/Capitalize";
 
 function CreateItem() {
 
@@ -95,7 +96,16 @@ function CreateItem() {
 
     if (loading) return <p>Loading...</p>;
     
-    
+    const handleGetPostalArea = async (postCode) => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/general-items/get-area/${postCode}`);
+            const tempAreaStr = response.data.toLowerCase();
+            const capitalized = Capitalize(tempAreaStr)
+            setArea(capitalized);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     //const userId = userData.userId;
 
     const handleCreateItemSubmit = async (e) => {
@@ -160,13 +170,8 @@ function CreateItem() {
 
             // Area validation
             if (area.trim() === "") {
-                setAreaError("You need to enter an area");
+                setAreaError("You need to enter a valid area");
                 valid = false;
-            } else if (area.trim().length > 20) {
-                setAreaError("Area name is too long");
-                valid = false;
-            } else {
-                setAreaError("");
             }
 
             if(!valid) return;
@@ -200,7 +205,6 @@ function CreateItem() {
         }
         else {
             try {
-                console.log("Edit mode!");
                 const token = localStorage.getItem("token");
                 const response = axios.put(`${API_BASE_URL}/general-items/edit/${itemId}`, formData, {
                     headers: {
@@ -217,6 +221,7 @@ function CreateItem() {
 
     return(
         <>
+        {console.log(area)}
         <h1>Create new ad</h1>
         <form onSubmit={handleCreateItemSubmit}>
             <FileUploader initialPreviewUrls={initialPreviewUrls} setImageFiles={setImageFiles}/>
@@ -286,6 +291,11 @@ function CreateItem() {
                             
                             if (/^\d{0,4}$/.test(value)) {
                                 setPostCode(value);
+                                if (value.length === 4) {
+                                    handleGetPostalArea(value);
+                                } else {
+                                    setArea("");
+                                }
                             }
                         }}
                     />
@@ -294,7 +304,7 @@ function CreateItem() {
                 
                 <div className="input-field">
                     <label htmlFor="area">Area</label>
-                    <input type="text" id="area" value={area} onChange={(e) => setArea(e.target.value)}/>
+                    <input type="text" id="area" value={area} readOnly/>
                     {areaError && <p style={{color: "red"}}>{areaError}</p>}
                 </div>
             </div>

@@ -168,3 +168,11 @@
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/obj/Debug/net8.0/QuickSell.Api.pdb
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/obj/Debug/net8.0/QuickSell.Api.genruntimeconfig.cache
 /Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/obj/Debug/net8.0/ref/QuickSell.Api.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/ClosedXML.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/ClosedXML.Parser.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/DocumentFormat.OpenXml.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/DocumentFormat.OpenXml.Framework.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/ExcelNumberFormat.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/RBush.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/SixLabors.Fonts.dll
+/Users/mohammadabdullahimran/Desktop/QuickSell/QuickSell.Api/bin/Debug/net8.0/System.IO.Packaging.dll

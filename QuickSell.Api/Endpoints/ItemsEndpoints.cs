@@ -6,6 +6,7 @@ using QuickSell.Api.Dtos;
 using QuickSell.Api.Entities;
 using QuickSell.Api.Mappers;
 using System.Security.Claims;
+using QuickSell.Api.Utils;
 
 namespace QuickSell.Api.Endpoints;
 
@@ -296,6 +297,18 @@ public static class ItemsEndpoints
 
             return Results.Ok(myItems);
         }).RequireAuthorization();
+
+
+        group.MapGet("/get-area/{postCode}", (string postCode) =>
+        {
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "postcode-register.xlsx");
+            Console.WriteLine("FILEPATH: " + filePath);
+            string result = FindPostAreaClass.GetPostArea(filePath, postCode);
+
+            
+
+            return Results.Ok(result);
+        });
 
 
 

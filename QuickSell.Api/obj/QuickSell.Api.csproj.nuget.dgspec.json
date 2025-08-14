@@ -48,6 +48,10 @@
               "target": "Package",
               "version": "[15.0.0, )"
             },
+            "ClosedXML": {
+              "target": "Package",
+              "version": "[0.105.0, )"
+            },
             "Magick.NET-Q16-AnyCPU": {
               "target": "Package",
               "version": "[14.7.0, )"
